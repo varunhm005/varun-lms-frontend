@@ -1,0 +1,238 @@
+query GetCoursesList($pagingInput: PagingInput, $filter: CourseFilter) {
+  courses(pagingInput: $pagingInput, filter: $filter) {
+    data {
+      startDate
+      price
+      name
+      median
+      mediumOfExam
+      imageUrl
+      id
+      examRequired
+      endDate
+      createdAt
+      courseStatus
+      courseCategoryId
+      type
+      courseCategory {
+        name
+        id
+      }
+      code
+      classLink
+    }
+    paging {
+      currentPage
+      hasPreviousPage
+      hasNextPage
+      nextPage
+      orderBy
+      previousPage
+      size
+      totalItems
+      totalPages
+      orderField
+    }
+  }
+}
+
+query GetCourseDetails($courseId: Int!) {
+  course(id: $courseId) {
+    courseAssessmentSkills {
+      id
+      assessmentSkillsId
+    }
+    Summary
+    classLink
+    code
+    courseCategory {
+      id
+      name
+      slug
+    }
+    courseCategoryId
+    courseStatus
+    createdAt
+    endDate
+    examRequired
+    id
+    imageUrl
+    instructor {
+      roleId
+      qualification
+      profileImageUrl
+      phone
+      passwordUrl
+      passportUrl
+      name
+      managerId
+      imageUrl
+      id
+    }
+    resources {
+      id
+      memeType
+      name
+      deleted
+      createdAt
+      coursesId
+      url
+    }
+    Chapters {
+      Questions {
+        answersOptions
+        chaptersId
+        correctAnswer
+        createdAt
+        id
+        mark
+        question
+        slug
+      }
+      chapterType
+      coursesId
+      id
+      link
+      name
+      slug
+    }
+    instructorId
+    median
+    mediumOfExam
+    name
+    price
+    slug
+    startDate
+    type
+    updatedAt
+    exams {
+      id
+      maximumMark
+      name
+      slug
+      passMark
+      updatedAt
+    }
+    expireIn
+    schedules {
+      createdAt
+      days
+      endDate
+      endTime
+      id
+      name
+      slug
+      startDate
+      startTime
+      updatedAt
+    }
+    certificateType
+    caaApprovalNo
+    functionName
+    maxStudentsAllowed
+  }
+}
+
+mutation CreateCourse($createCourseInput: CreateCourseInput!) {
+  createCourse(createCourseInput: $createCourseInput) {
+    id
+    name
+  }
+}
+
+mutation UpdateCourse($updateCourseInput: UpdateCourseInput!) {
+  updateCourse(updateCourseInput: $updateCourseInput) {
+    id
+    name
+  }
+}
+
+query GetCourseLevels($courseId: Int!) {
+  course(id: $courseId) {
+    levels {
+      id
+      level
+      title
+      slug
+      coursesId
+    }
+    id
+    name
+    createdAt
+    code
+    median
+    imageUrl
+    instructor {
+      roleId
+      qualification
+      profileImageUrl
+      phone
+      passwordUrl
+      passportUrl
+      name
+      managerId
+      imageUrl
+      id
+    }
+  }
+}
+
+query GeCoursesNames($pagingInput: PagingInput, $filter: CourseFilter) {
+  courses(pagingInput: $pagingInput, filter: $filter) {
+    data {
+      id
+      name
+      levels {
+        id
+        level
+        title
+        courseSchedule {
+          name
+          id
+          endTime
+          endDate
+          startDate
+          startTime
+          isLocked
+        }
+      }
+    }
+  }
+}
+
+query GetCourseData($courseId: Int!) {
+  course(id: $courseId) {
+    id
+    slug
+    name
+    code
+    price
+    classLink
+    examRequired
+    type
+    median
+    mediumOfExam
+    courseCategoryId
+    startDate
+    endDate
+    Summary
+    imageUrl
+    instructorId
+    courseStatus
+  }
+}
+
+query GeCoursesNamesOnly($pagingInput: PagingInput, $filter: CourseFilter) {
+  courses(pagingInput: $pagingInput, filter: $filter) {
+    data {
+      id
+      name
+    }
+  }
+}
+
+mutation RemoveCourse($removeCourseId: Int!) {
+  removeCourse(id: $removeCourseId) {
+    id
+  }
+}

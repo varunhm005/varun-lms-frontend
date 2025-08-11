@@ -1,0 +1,41 @@
+query GetDepartments($pagingInput: PagingInput) {
+  departments(pagingInput: $pagingInput) {
+    paging {
+      currentPage
+      hasNextPage
+      hasPreviousPage
+      nextPage
+      orderField
+      orderBy
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+    data {
+      companyId
+      createdAt
+      id
+      name
+      slug
+    }
+  }
+}
+
+mutation CreateDepartment($createDepartmentInput: CreateDepartmentInput!) {
+  createDepartment(createDepartmentInput: $createDepartmentInput) {
+    createdAt
+    id
+    name
+    slug
+  }
+}
+
+mutation UpdateDepartment($updateDepartmentInput: UpdateDepartmentInput!) {
+  updateDepartment(updateDepartmentInput: $updateDepartmentInput) {
+    createdAt
+    id
+    name
+    slug
+  }
+}

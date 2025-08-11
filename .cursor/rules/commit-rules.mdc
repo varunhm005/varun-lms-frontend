@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- Use conventional commits
+- use feat, fix, chore, ci, docs etc
+- The commit message should be under 120 characters

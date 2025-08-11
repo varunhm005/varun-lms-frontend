@@ -1,0 +1,39 @@
+query UserRoles($pagingInput: PagingInput) {
+  userRoles(pagingInput: $pagingInput) {
+    data {
+      createdAt
+      deleted
+      id
+      name
+      slug
+    }
+    paging {
+      currentPage
+      hasNextPage
+      hasPreviousPage
+      nextPage
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+  }
+}
+
+mutation CreateUserRole($createUserRoleInput: CreateUserRoleInput!) {
+  createUserRole(createUserRoleInput: $createUserRoleInput) {
+    name
+    slug
+    id
+  }
+}
+
+mutation UpdateUserRole($updateUserRoleInput: UpdateUserRoleInput!) {
+  updateUserRole(updateUserRoleInput: $updateUserRoleInput) {
+    companyId
+    createdAt
+    name
+    id
+    slug
+  }
+}

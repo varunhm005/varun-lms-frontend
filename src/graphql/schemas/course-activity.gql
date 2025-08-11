@@ -1,0 +1,43 @@
+mutation CreateAttendedActivity($createAttendedActivityInput: CreateAttendedActivityInput!) {
+  createAttendedActivity(createAttendedActivityInput: $createAttendedActivityInput) {
+    achivedMark
+    chaptersId
+    createdAt
+    deleted
+    deletedAt
+    id
+    maxMark
+    scheduleProgressId
+    slug
+    status
+    updatedAt
+    userId
+  }
+}
+
+query GetAttendedActivityByChapterAndSchedule($getAttendedActivityInput: GetAttendedActivityInput) {
+  attendedActivityByChapterAndSchedule(getAttendedActivityInput: $getAttendedActivityInput) {
+    achivedMark
+    chaptersId
+    createdAt
+    deleted
+    deletedAt
+    id
+    maxMark
+    scheduleProgressId
+    slug
+    status
+    updatedAt
+    userId
+    activityAnswers {
+      answer
+      answerStatus
+      correctAnswerMark
+      questionId
+      questionText
+      selectedAnswerMark
+      correctAnswer
+      id
+    }
+  }
+}

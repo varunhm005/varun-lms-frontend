@@ -1,0 +1,36 @@
+query GetDesignations($pagingInput: PagingInput) {
+  designations(pagingInput: $pagingInput) {
+    data {
+      id
+      name
+      slug
+    }
+    paging {
+      currentPage
+      hasNextPage
+      hasPreviousPage
+      nextPage
+      orderBy
+      orderField
+      previousPage
+      size
+      totalPages
+      totalItems
+    }
+  }
+}
+
+mutation CreateDesignation($createDesignationInput: CreateDesignationInput!) {
+  createDesignation(createDesignationInput: $createDesignationInput) {
+    id
+    name
+    slug
+  }
+}
+
+mutation UpdateDesignation($updateDesignationInput: UpdateDesignationInput!) {
+  updateDesignation(updateDesignationInput: $updateDesignationInput) {
+    id
+    name
+  }
+}

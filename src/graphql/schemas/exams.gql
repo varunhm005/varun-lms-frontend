@@ -1,0 +1,143 @@
+mutation CreateExam($createExamInput: CreateExamInput!) {
+  createExam(createExamInput: $createExamInput) {
+    achivedMark
+    coursesId
+    createdAt
+    deleted
+    id
+    maximumMark
+    name
+    passMark
+    updatedAt
+    slug
+  }
+}
+
+query GetExam($examId: Int!) {
+  exam(id: $examId) {
+    slug
+    passMark
+    name
+    id
+    maximumMark
+    createdAt
+    coursesId
+    type
+    courseLevelId
+    Questions {
+      answer
+      answerType
+      FailPromt
+      answersOptions
+      correctAnswer
+      examsId
+      id
+      mark
+      question
+      slug
+      successPromt
+      orderNo
+      scenarioId
+      media {
+        id
+        name
+        url
+        thumbnail
+      }
+    }
+  }
+}
+
+query GetExams($pagingInput: PagingInput, $examFilter: ExamFilter) {
+  exams(pagingInput: $pagingInput, examFilter: $examFilter) {
+    paging {
+      currentPage
+      hasNextPage
+      hasPreviousPage
+      nextPage
+      orderBy
+      orderField
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+    data {
+      cource {
+        id
+        name
+      }
+      coursesId
+      createdAt
+      id
+      maximumMark
+      name
+      passMark
+      slug
+      updatedAt
+    }
+  }
+}
+
+mutation UpdateExam($updateExamInput: UpdateExamInput!) {
+  updateExam(updateExamInput: $updateExamInput) {
+    id
+    name
+    maximumMark
+    coursesId
+    passMark
+    slug
+    updatedAt
+    courseLevelId
+  }
+}
+
+mutation CreateQuestionScenario($createQuestionScenarioInput: CreateQuestionScenarioInput!) {
+  createQuestionScenario(createQuestionScenarioInput: $createQuestionScenarioInput) {
+    id
+    deleted
+    createdAt
+    name
+    slug
+    updatedAt
+  }
+}
+
+mutation UpdateQuestionScenario($updateQuestionScenarioInput: UpdateQuestionScenarioInput!) {
+  updateQuestionScenario(updateQuestionScenarioInput: $updateQuestionScenarioInput) {
+    id
+    name
+    slug
+    updatedAt
+    createdAt
+  }
+}
+
+query GetQuestionScenarios($filter: QuestionScenarioFilters) {
+  questionScenarios(filter: $filter) {
+    id
+    levelId
+    name
+    scenario
+    slug
+    media {
+      id
+      name
+      url
+      thumbnail
+    }
+  }
+}
+
+query GetCourseLevelExams($courseLevelId: Int!) {
+  courseLevel(id: $courseLevelId) {
+    exams {
+      id
+      name
+      maximumMark
+      passMark
+      slug
+      type
+    }
+  }
+}

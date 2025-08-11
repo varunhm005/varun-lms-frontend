@@ -1,0 +1,13 @@
+[
+  {
+    "origin": [
+      "https://lms-dev-tr.web.app",
+      "https://lms.omansats.om",
+      "https://omanstatslms.web.app/",
+      "http://localhost:7051"
+    ],
+    "method": ["GET", "HEAD", "DELETE", "PUT", "OPTIONS", "POST"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["*"]
+  }
+]

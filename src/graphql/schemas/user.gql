@@ -1,0 +1,222 @@
+mutation CreateUser($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
+    id
+    firebaseID
+    email
+    departmentId
+    dateOfBirth
+    idNumber
+    idUrl
+    imageUrl
+    managerId
+    name
+    passportUrl
+    passwordUrl
+    phone
+    profileImageUrl
+    qualification
+    roleId
+    slug
+  }
+}
+
+query GetUsers($pagingInput: PagingInput, $filter: UserFilter) {
+  users(pagingInput: $pagingInput, filter: $filter) {
+    data {
+      createdAt
+      dateOfBirth
+      deleted
+      department {
+        id
+        name
+      }
+      email
+      firebaseID
+      id
+      idNumber
+      idUrl
+      imageUrl
+      manager {
+        id
+        name
+      }
+      name
+      # passportUrl
+      # passwordUrl
+      phone
+      profileImageUrl
+      qualification
+      role {
+        id
+        name
+      }
+      # roleId
+      slug
+      updatedAt
+      status
+    }
+    paging {
+      currentPage
+      hasPreviousPage
+      hasNextPage
+      nextPage
+      orderBy
+      previousPage
+      size
+      totalItems
+      totalPages
+      orderField
+    }
+  }
+}
+query GetUsersOnly($pagingInput: PagingInput, $filter: UserFilter) {
+  users(pagingInput: $pagingInput, filter: $filter) {
+    data {
+      id
+      name
+      idNumber
+      status
+    }
+    paging {
+      currentPage
+      hasPreviousPage
+      hasNextPage
+      nextPage
+      orderBy
+      previousPage
+      size
+      totalItems
+      totalPages
+      orderField
+    }
+  }
+}
+
+query GetUserProfile {
+  getUserProfile {
+    companyId
+    createdAt
+    dateOfBirth
+    departmentId
+    email
+    firebaseID
+    id
+    idUrl
+    idNumber
+    imageUrl
+    managerId
+    name
+    passportUrl
+    passwordUrl
+    phone
+    profileImageUrl
+    qualification
+    roleId
+    updatedAt
+    slug
+    role {
+      id
+      name
+    }
+  }
+}
+
+mutation updateUserProfile($updateUserInput: UpdateUserInput!) {
+  updateUser(updateUserInput: $updateUserInput) {
+    # id
+    # idNumber
+    # idUrl
+    # imageUrl
+    # managerId
+    # name
+    # passportUrl
+    # passwordUrl
+    # phone
+    # profileImageUrl
+    # qualification
+    # slug
+    # updatedAt
+    # email
+    # departmentId
+    # dateOfBirth
+    # createdAt
+    companyId
+    createdAt
+    dateOfBirth
+    departmentId
+    email
+    firebaseID
+    id
+    idUrl
+    idNumber
+    imageUrl
+    managerId
+    name
+    passportUrl
+    passwordUrl
+    phone
+    profileImageUrl
+    qualification
+    roleId
+    updatedAt
+    slug
+  }
+}
+
+query GetUserDetails($userId: Int!) {
+  user(id: $userId) {
+    companyId
+    createdAt
+    dateOfBirth
+    departmentId
+    email
+    firebaseID
+    id
+    idNumber
+    idUrl
+    imageUrl
+    managerId
+    name
+    passportUrl
+    passwordUrl
+    phone
+    profileImageUrl
+    qualification
+    roleId
+    slug
+    type
+    updatedAt
+    institution
+    status
+    signature
+    designationId
+  }
+}
+
+mutation UpdatePassword($updatePasswordInput: UpdatePasswordInput!) {
+  updatePassword(updatePasswordInput: $updatePasswordInput) {
+    id
+  }
+}
+
+mutation BulkInsertUser($bulkUserInput: [BulkUserInput!]!) {
+  bulkInsertUser(bulkUserInput: $bulkUserInput) {
+    email
+    idNumber
+    name
+    password
+    status
+    idNumber
+    name
+    email
+    password
+    status
+    errorMessage
+    role
+    lineManagerEmplyeeID
+    department
+    designation
+    type
+    institution
+  }
+}

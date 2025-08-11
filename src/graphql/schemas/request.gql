@@ -1,0 +1,54 @@
+mutation CreateRequest($createRequestInput: CreateRequestInput!) {
+  createRequest(createRequestInput: $createRequestInput) {
+    id
+    rejectedOn
+    remarks
+    requestedOn
+    type
+    status
+    slug
+    userId
+    approvedOn
+  }
+}
+
+query GetRequests($findRequestInput: FindRequestInput!, $pagingInput: PagingInput) {
+  requests(findRequestInput: $findRequestInput, pagingInput: $pagingInput) {
+    data {
+      approvedOn
+      contextId
+      context
+      coursesId
+      createdAt
+      creatorId
+      id
+      rejectedOn
+      remarks
+      requestedOn
+      slug
+      status
+      type
+      updatedAt
+      userId
+      #   course {
+      #     id
+      #     name
+      #   }
+      user {
+        id
+        name
+      }
+      attendedExam {
+        id
+        slug
+      }
+      reason
+    }
+  }
+}
+
+mutation UpdateRequest($updateRequestInput: UpdateRequestInput!) {
+  updateRequest(updateRequestInput: $updateRequestInput) {
+    id
+  }
+}

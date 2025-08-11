@@ -1,0 +1,87 @@
+mutation CreateCourseEvaluation($createCourseEvaluationInput: CreateCourseEvaluationInput!) {
+  createCourseEvaluation(createCourseEvaluationInput: $createCourseEvaluationInput) {
+    id
+    slug
+  }
+}
+
+query GetCourseEvaluation($slug: String!) {
+  courseEvaluation(slug: $slug) {
+    id
+    slug
+    remarks
+    language
+    courseScheduleStudentsId
+    createdAt
+    course {
+      id
+      name
+      instructor {
+        id
+        name
+      }
+    }
+    questions {
+      category
+      questions {
+        id
+        slug
+        type
+        answer
+        questions {
+          id
+          language
+          question
+          questionType
+          options
+        }
+      }
+    }
+  }
+}
+
+mutation UpdateCourseEvaluation($updateCourseEvaluationInput: UpdateCourseEvaluationInput!) {
+  updateCourseEvaluation(updateCourseEvaluationInput: $updateCourseEvaluationInput) {
+    id
+    slug
+  }
+}
+
+query CourseEvaluationsList($pagingInput: PagingInput, $filter: CourseEvaluationFilter) {
+  courseEvaluations(pagingInput: $pagingInput, filter: $filter) {
+    data {
+      course {
+        id
+        name
+        instructor {
+          id
+          name
+        }
+      }
+      courseLevel {
+        id
+        title
+      }
+      id
+      language
+      slug
+      createdAt
+      student {
+        id
+        name
+      }
+    }
+    paging {
+      size
+      currentPage
+      totalPages
+      totalItems
+      hasPreviousPage
+      hasNextPage
+      orderBy
+      orderField
+      nextPage
+      previousPage
+    }
+  }
+}

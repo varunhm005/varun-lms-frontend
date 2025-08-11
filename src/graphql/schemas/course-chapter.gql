@@ -1,0 +1,66 @@
+mutation CreateChapter($createChapterInput: CreateChapterInput!) {
+  createChapter(createChapterInput: $createChapterInput) {
+    chapterType
+    createdAt
+    deleted
+    id
+    name
+    slug
+    updatedAt
+  }
+}
+
+query GetChapterDetails($chapterId: Int!) {
+  chapter(id: $chapterId) {
+    keyLearning
+    Questions {
+      answer
+      answersOptions
+      correctAnswer
+      id
+      mark
+      question
+      slug
+    }
+    chapterType
+    coursesId
+    createdAt
+    deleted
+    id
+    link
+    name
+    slug
+    updatedAt
+    courses {
+      median
+      name
+      price
+      id
+      imageUrl
+      code
+      instructor {
+        name
+        id
+      }
+    }
+  }
+}
+
+mutation UpdateChapter($updateChapterInput: UpdateChapterInput!) {
+  updateChapter(updateChapterInput: $updateChapterInput) {
+    chapterType
+    coursesId
+    createdAt
+    id
+    keyLearning
+    link
+    name
+    slug
+  }
+}
+
+mutation RemoveChapter($id: Int!) {
+  removeChapter(id: $id) {
+    message
+  }
+}

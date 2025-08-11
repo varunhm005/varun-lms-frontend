@@ -1,0 +1,297 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200;0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700;0,6..12,800;0,6..12,900;0,6..12,1000;1,6..12,200;1,6..12,300;1,6..12,400;1,6..12,500;1,6..12,600;1,6..12,700;1,6..12,800;1,6..12,900;1,6..12,1000&display=swap');
+
+@import '@cyntler/react-doc-viewer/dist/index.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$primary-color: #a61a23;
+$secondary-color: #f9faf5;
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+}
+.login-page {
+  background: url(./assets/images/login-bg.jpg);
+  background-size: cover;
+  .logo {
+    max-width: 200px;
+    margin: 0px auto;
+    display: inline-block;
+    margin-bottom: 30px;
+  }
+  .login-left {
+    // background: #fff;
+    .form-field {
+      width: 300px;
+      margin: 0px auto;
+      background: rgba(255, 255, 255, 0.75);
+      padding: 20px;
+      border-radius: 30px;
+    }
+  }
+  .login-right {
+    background: url(./assets/images/login-one.png) right no-repeat;
+
+    background-position: top;
+    background-size: cover;
+  }
+  .login-bg {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    max-width: 77%;
+  }
+  .ant-input {
+    border-radius: 30px;
+  }
+  .ant-input-password {
+    border-radius: 30px;
+  }
+}
+.side-bar {
+  .ant-menu {
+    background: $secondary-color;
+  }
+  .side-logo {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    .logo {
+      max-width: 150px;
+      margin: 0px auto;
+    }
+  }
+}
+.page-title {
+  font-size: 20px;
+}
+.profile-btn {
+  background: #eaeaea !important;
+  padding-right: 8px !important;
+  padding-left: 8px !important;
+  border: none !important;
+}
+.search-box {
+  border-bottom: 1.5px solid rgb(234, 234, 234);
+  // padding-bottom: 5px;
+  // padding-top: 5px;
+
+  .ant-input-affix-wrapper {
+    background: none !important;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px !important;
+    border-color: #eaeaea !important;
+  }
+  .ant-input {
+    background: none;
+  }
+}
+.card-style {
+  border-radius: 20px !important;
+  border: none !important;
+}
+.form-design {
+  .ant-form-item {
+    margin-bottom: 15px !important;
+  }
+
+  .ant-input {
+    border-radius: 15px !important;
+  }
+
+  .ant-select {
+    border-radius: 30px !important;
+  }
+  .ant-select-selector {
+    border-radius: 30px !important;
+  }
+  .ant-upload {
+    width: 100%;
+    .ant-btn {
+      width: 100%;
+      text-align: left;
+    }
+  }
+}
+.edit-filed {
+  background: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+}
+.certificate-card {
+  border-radius: 25px;
+  background: #ceffe5;
+  max-width: 280px;
+  overflow: hidden;
+  .check-outline {
+    font-size: 100px;
+    color: #00cc60;
+    position: absolute;
+    right: -15px;
+    bottom: -15px;
+  }
+}
+.card-pass {
+  background: #ceffe5;
+}
+.card-completed {
+  background: #8fffc4;
+}
+
+.input-rounded {
+  .ant-input,
+  .ant-input-number-input,
+  .ant-select-selector {
+    border-radius: 30px !important;
+    width: 100% !important;
+  }
+}
+
+.certificate-create {
+  .ant-upload-list-item-name {
+    max-width: 200px !important;
+  }
+}
+
+.antd-image-200 {
+  .ant-upload-list-item-name {
+    max-width: 200px !important;
+  }
+}
+
+.rounded-select {
+  .ant-select-selector {
+    border-radius: 30px !important;
+  }
+}
+
+.ant-table {
+  border-radius: 20px !important;
+  border: none !important;
+}
+
+.ant-table-thead {
+  background: #f3f3ef !important;
+  border-radius: 25px !important;
+}
+.ant-table-thead {
+  th:first-chiled {
+    border-radius: 25px 0px 0px 25px;
+  }
+}
+.ant-table-cell {
+  // background: none !important;
+}
+.ant-table-container table > thead > tr:first-child > *:first-child {
+  border-radius: 25px 0px 0px 25px !important;
+}
+.ant-table-container table > thead > tr:first-child > *:last-child {
+  border-radius: 0px 25px 25px 0px !important;
+}
+.ant-table {
+  background: none;
+}
+
+.gradient_background {
+  background: rgb(183, 51, 108) !important;
+  background: -moz-linear-gradient(
+    144deg,
+    rgba(183, 51, 108, 1) 0%,
+    rgba(239, 75, 37, 1) 100%
+  ) !important;
+  background: -webkit-linear-gradient(
+    144deg,
+    rgba(183, 51, 108, 1) 0%,
+    rgba(239, 75, 37, 1) 100%
+  ) !important;
+  background: linear-gradient(
+    144deg,
+    rgba(183, 51, 108, 1) 0%,
+    rgba(239, 75, 37, 1) 100%
+  ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b7336c",endColorstr="#ef4b25",GradientType=1) !important;
+}
+
+.gradient_background {
+  background: rgb(183, 51, 108) !important;
+  background: -moz-linear-gradient(
+    144deg,
+    rgba(183, 51, 108, 1) 0%,
+    rgba(239, 75, 37, 1) 100%
+  ) !important;
+  background: -webkit-linear-gradient(
+    144deg,
+    rgba(183, 51, 108, 1) 0%,
+    rgba(239, 75, 37, 1) 100%
+  ) !important;
+  background: linear-gradient(
+    144deg,
+    rgba(183, 51, 108, 1) 0%,
+    rgba(239, 75, 37, 1) 100%
+  ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b7336c",endColorstr="#ef4b25",GradientType=1) !important;
+}
+.ant-layout-header {
+  .ant-btn-text {
+    span {
+      color: #fff;
+    }
+  }
+  .anticon-left {
+    color: #fff;
+    span {
+      color: #fff;
+    }
+  }
+}
+.level-list {
+  background: #ffe0de !important;
+  .ant-card-actions {
+    li {
+      margin: 0px !important;
+      span {
+        color: #fff !important;
+      }
+    }
+  }
+}
+.certificate-bg {
+  background: url(./assets/images/certificate-bg.png);
+  background-size: 100%;
+}
+
+.chapter-doc-container {
+  #msdoc-renderer,
+  #msdoc-iframe {
+    min-height: 70vh !important;
+  }
+}
+
+.attend-exam-doc-container {
+  #msdoc-renderer,
+  #msdoc-iframe {
+    min-height: 400px !important;
+  }
+}
+
+.doc-viewer-no-download {
+  .react-pdf__Page__textContent {
+    user-select: none;
+  }
+  
+  iframe {
+    pointer-events: none;
+  }
+
+  button[title*="Download"],
+  button[aria-label*="Download"],
+  a[title*="Download"],
+  a[aria-label*="Download"] {
+    display: none !important;
+  }
+}

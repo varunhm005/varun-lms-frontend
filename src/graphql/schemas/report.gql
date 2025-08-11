@@ -1,0 +1,60 @@
+query GetAttendanceReport($attendanceReportFilter: AttendanceReportFilter) {
+  attendanceReport(attendanceReportFilter: $attendanceReportFilter) {
+    filter
+    message
+    report
+    success
+  }
+}
+
+query GetReportList {
+  reportList {
+    title
+    description
+    slug
+  }
+}
+
+query GetReportListItem($slug: String!) {
+  reportListItem(slug: $slug) {
+    columns {
+      dataIndex
+      key
+      title
+      type
+      bgColor
+      color
+    }
+    description
+    filters {
+      label
+      name
+      type
+      rules
+      options {
+        label
+        value
+      }
+    }
+    slug
+    title
+  }
+}
+
+query GenerateReport($slug: String!, $filter: JSON) {
+  generateReport(slug: $slug, filter: $filter) {
+    filter
+    columns {
+      dataIndex
+      key
+      title
+      type
+      bgColor
+      color
+    }
+    message
+    report
+    reportData
+    success
+  }
+}

@@ -1,0 +1,107 @@
+query GetAssessments($pagingInput: PagingInput, $assessmentFilter: AssessmentFilter) {
+  assessments(pagingInput: $pagingInput, assessmentFilter: $assessmentFilter) {
+    paging {
+      currentPage
+      hasNextPage
+      hasPreviousPage
+      nextPage
+      orderBy
+      orderField
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+    data {
+      assessValidity
+      courseScheduleStudentsId
+      createdAt
+      date
+      id
+      name
+      nextAssessment
+      slug
+      updatedAt
+      type
+      attitude
+      assementAction
+      result
+      skillsOfAssessment {
+        applicable
+        skill {
+          name
+          id
+        }
+      }
+      courseScheduleStudent {
+        id
+        name
+        user {
+          id
+          name
+          idNumber
+        }
+        courseSchedule {
+          coursesId
+        }
+      }
+    }
+  }
+}
+
+mutation CreateAssessment($createAssessmentInput: CreateAssessmentInput!) {
+  createAssessment(createAssessmentInput: $createAssessmentInput) {
+    assessValidity
+    courseScheduleStudentsId
+    createdAt
+    date
+    id
+    name
+    nextAssessment
+  }
+}
+
+query GetAssessment($slug: String!) {
+  assessment(slug: $slug) {
+    assessValidity
+    courseScheduleStudentsId
+    createdAt
+    date
+    id
+    name
+    nextAssessment
+    slug
+    updatedAt
+    assementAction
+    type
+    attitude
+    validUpTo
+    result
+    skillsOfAssessment {
+      applicable
+      skill {
+        name
+        id
+      }
+    }
+    courseScheduleStudent {
+      id
+      name
+      user {
+        id
+        name
+        idNumber
+      }
+    }
+  }
+}
+
+mutation UpdateAssessment(
+  $updateAssessmentInput: UpdateAssessmentInput!
+  $updateAssessmentId: Int!
+) {
+  updateAssessment(updateAssessmentInput: $updateAssessmentInput, id: $updateAssessmentId) {
+    id
+    name
+  }
+}

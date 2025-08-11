@@ -1,0 +1,149 @@
+mutation CreateAttendedExam($createAttendedExamInput: CreateAttendedExamInput!) {
+  createAttendedExam(createAttendedExamInput: $createAttendedExamInput) {
+    slug
+  }
+}
+
+query GetAttendedExam($attendedExamId: String!) {
+  attendedExam(slug: $attendedExamId) {
+    userId
+    createdAt
+    id
+    slug
+    status
+    totalMark
+    courseScheduleStudentsId
+    name
+    examAttended
+    AttendedExamAnswers {
+      answer
+      answerStatus
+      createdAt
+      id
+      slug
+      questionText
+      mediaUrl
+      orderNo
+      correctAnswerMark
+      answersOptions
+      answerType
+      questionScenarioId
+      scenarioText
+    }
+  }
+}
+
+mutation UpdateAttendedExamAnswer($updateAttendedExamAnswerInput: UpdateAttendedExamAnswerInput!) {
+  updateAttendedExamAnswer(updateAttendedExamAnswerInput: $updateAttendedExamAnswerInput) {
+    id
+  }
+}
+
+mutation UpdateAttendedExam($updateAttendedExamInput: UpdateAttendedExamInput!) {
+  updateAttendedExam(updateAttendedExamInput: $updateAttendedExamInput) {
+    id
+    status
+  }
+}
+
+query GetAttendedExams($filter: GetAttendedExamFilter, $pagingInput: PagingInput) {
+  attendedExams(filter: $filter, pagingInput: $pagingInput) {
+    data {
+      achivedMark
+      courseScheduleStudentsId
+      createdAt
+      deleted
+      deletedAt
+      examsId
+      id
+      name
+      slug
+      status
+      totalMark
+      updatedAt
+      userId
+      user {
+        id
+        name
+      }
+    }
+    paging {
+      currentPage
+      hasNextPage
+      nextPage
+      hasPreviousPage
+      orderBy
+      orderField
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+  }
+}
+
+query GetAttendedExamDetails($attendedExamId: String!) {
+  attendedExam(slug: $attendedExamId) {
+    userId
+    createdAt
+    id
+    slug
+    status
+    totalMark
+    courseScheduleStudentsId
+    name
+    AttendedExamAnswers {
+      answer
+      answerStatus
+      createdAt
+      id
+      slug
+      questionText
+      mediaUrl
+      orderNo
+      correctAnswerMark
+      answersOptions
+      answerType
+      questionScenarioId
+      scenarioText
+      selectedAnswerMark
+      correctAnswer
+      remarks
+    }
+  }
+}
+
+mutation CreteOrUpdateOfflineExam($createOfflineExamInput: CreateOfflineExamInput!) {
+  creteOrUpdateOfflineExam(createOfflineExamInput: $createOfflineExamInput) {
+    id
+    slug
+    name
+    createdAt
+    updatedAt
+    deletedAt
+    deleted
+    user {
+      name
+      id
+    }
+    userId
+    exam {
+      id
+      name
+      passMark
+      maximumMark
+    }
+    examsId
+    totalMark
+    achivedMark
+    status
+    courseScheduleStudentsId
+    examAttended
+  }
+}
+
+mutation BulkUpdateAttendedExam($bulkUpdateAttendedExamInput: [BulkUpdateAttendedExamInput!]!) {
+  bulkUpdateAttendedExam(bulkUpdateAttendedExamInput: $bulkUpdateAttendedExamInput) {
+    id
+  }
+}

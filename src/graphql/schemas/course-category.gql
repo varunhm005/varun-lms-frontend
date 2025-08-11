@@ -1,0 +1,40 @@
+query GetCourseCategory($PagingInput: PagingInput) {
+  courseCategories(pagingInput: $PagingInput) {
+    paging {
+      currentPage
+      hasNextPage
+      hasPreviousPage
+      nextPage
+      orderBy
+      orderField
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+    data {
+      name
+      slug
+      id
+      createdAt
+    }
+  }
+}
+
+mutation createCourseCategory($createCourseCategoryInput: CreateCourseCategoryInput!) {
+  createCourseCategory(createCourseCategoryInput: $createCourseCategoryInput) {
+    id
+    name
+    slug
+    createdAt
+  }
+}
+
+mutation updateCourseCategory($updateCourseCategoryInput: UpdateCourseCategoryInput!) {
+  updateCourseCategory(updateCourseCategoryInput: $updateCourseCategoryInput) {
+    id
+    name
+    slug
+    createdAt
+  }
+}

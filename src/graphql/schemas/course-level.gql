@@ -1,0 +1,146 @@
+mutation CreateCourseLevel($createCourseLevelInput: CreateCourseLevelInput!) {
+  createCourseLevel(createCourseLevelInput: $createCourseLevelInput) {
+    coursesId
+    id
+    level
+    title
+    slug
+  }
+}
+
+mutation UpdateCourseLevel($updateCourseLevelInput: UpdateCourseLevelInput!) {
+  updateCourseLevel(updateCourseLevelInput: $updateCourseLevelInput) {
+    id
+    level
+    slug
+    title
+    coursesId
+  }
+}
+query GetCourseLevelDetails($courseLevelId: Int!) {
+  courseLevel(id: $courseLevelId) {
+    coursesId
+    id
+    slug
+    level
+    title
+    course {
+      name
+      id
+      imageUrl
+      expireIn
+      examRequired
+      endDate
+      deleted
+      createdAt
+      courseStatus
+      courseCategoryId
+      median
+      code
+      mediumOfExam
+      maxStudentsAllowed
+    }
+    chapters {
+      Media {
+        id
+        name
+        slug
+        thumbnail
+        chaptersId
+        createdAt
+      }
+      id
+      createdAt
+      coursesId
+      chapterType
+      keyLearning
+      link
+      name
+      slug
+      updatedAt
+    }
+    exams {
+      achivedMark
+      createdAt
+      coursesId
+      deleted
+      id
+      maximumMark
+      name
+      passMark
+      slug
+      updatedAt
+    }
+    courseSchedule {
+      coursesId
+      days
+      deleted
+      endDate
+      endTime
+      id
+      courseLevelId
+      name
+      slug
+      startDate
+      startTime
+      updatedAt
+      createdAt
+    }
+  }
+}
+
+query GetCourseLevelResources($courseLevelId: Int!) {
+  courseLevel(id: $courseLevelId) {
+    resources {
+      name
+      id
+      memeType
+      slug
+      url
+    }
+  }
+}
+
+query GetCourseDetailsWithLevelId($courseLevelId: Int!) {
+  courseLevel(id: $courseLevelId) {
+    coursesId
+    id
+    slug
+    level
+    title
+    course {
+      id
+      slug
+      name
+      examRequired
+      type
+      median
+      mediumOfExam
+      courseCategoryId
+      startDate
+      endDate
+      Summary
+      imageUrl
+      instructorId
+      courseStatus
+      expireIn
+      maxStudentsAllowed
+    }
+  }
+}
+
+query GetCourseLevelNotAttendedUser($courseLevelId: Int!) {
+  courseLevelNotAttendedUser(courseLevelId: $courseLevelId) {
+    id
+    name
+    slug
+  }
+}
+
+query GetStudentsExpiredInCourse($courseLevelId: Int!) {
+  getStudentsExpiredInCourse(courseLevelId: $courseLevelId) {
+    id
+    name
+    slug
+  }
+}

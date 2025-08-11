@@ -1,0 +1,45 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "prettier.configPath": ".prettierrc.json",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit",
+      "vscode-graphql-execution.showExecCodelens": "never"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#f8eec4",
+      "activityBar.background": "#f8eec4",
+      "activityBar.foreground": "#15202b",
+      "activityBar.inactiveForeground": "#15202b99",
+      "activityBarBadge.background": "#14ab8e",
+      "activityBarBadge.foreground": "#e7e7e7",
+      "commandCenter.border": "#15202b99",
+      "sash.hoverBorder": "#f8eec4",
+      "statusBar.background": "#f2e197",
+      "statusBar.foreground": "#15202b",
+      "statusBarItem.hoverBackground": "#ecd46a",
+      "statusBarItem.remoteBackground": "#f2e197",
+      "statusBarItem.remoteForeground": "#15202b",
+      "titleBar.activeBackground": "#f2e197",
+      "titleBar.activeForeground": "#15202b",
+      "titleBar.inactiveBackground": "#f2e19799",
+      "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#f2e197",
+    "editor.acceptSuggestionOnEnter": "on",
+    "[go]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "explicit"
+      }
+    }
+  }
+}

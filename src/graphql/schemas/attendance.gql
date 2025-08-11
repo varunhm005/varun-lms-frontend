@@ -1,0 +1,74 @@
+mutation CreateAttendance($createAttendanceInput: CreateAttendanceInput!) {
+  createAttendance(createAttendanceInput: $createAttendanceInput) {
+    id
+    slug
+    type
+    date
+  }
+}
+
+query GetAttendanceDetails($slug: String!) {
+  attendance(slug: $slug) {
+    courseLevelId
+    courseScheduleId
+    courseScheduleStudentsId
+    coursesId
+    createdAt
+    creatorId
+    date
+    id
+    slug
+    students {
+      id
+      userId
+      status
+      slug
+      updatedAt
+      user {
+        name
+        id
+      }
+    }
+    type
+    updatedAt
+    updaterId
+  }
+}
+
+mutation UpdateAttendanceStudent($updateAttendanceStudentInput: UpdateAttendanceStudentInput!) {
+  updateAttendanceStudent(updateAttendanceStudentInput: $updateAttendanceStudentInput) {
+    id
+    slug
+  }
+}
+
+query GetAttendancesForSchedule(
+  $findAttendanceInput: FindAttendanceInput!
+  $pagingInput: PagingInput!
+) {
+  attendances(findAttendanceInput: $findAttendanceInput, pagingInput: $pagingInput) {
+    data {
+      slug
+      id
+      type
+      creatorId
+      date
+      creator {
+        id
+        name
+      }
+    }
+    paging {
+      currentPage
+      hasNextPage
+      hasPreviousPage
+      nextPage
+      orderBy
+      orderField
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+  }
+}

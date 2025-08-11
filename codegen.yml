@@ -1,0 +1,26 @@
+overwrite: true
+watch: true
+schema: 'http://localhost:7500/api/graphql'
+# schema: 'http://192.168.1.77:7500/api/graphql'
+# schema: 'https://lms-be-staging.up.railway.app/api/graphql'
+documents: './src/*/**/*.gql'
+hooks:
+  afterAllFileWrite:
+    - prettier --write
+    - eslint --fix
+generates:
+  src/graphql/@generated/graphql.tsx:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+      - named-operations-object
+      - add:
+          content: '// THIS IS A GENERATED FILE, use `npm run graphql:codegen` to regenerate'
+      - add:
+          content: '/* eslint-disable */'
+      - add:
+          content: '/* @ts-ignore */'
+  # src/graphql/@generated/graphql.schema.json:
+  #   plugins:
+  #     - "introspection"

@@ -1,0 +1,187 @@
+mutation CreateCourseSchedule($createCourseScheduleInput: CreateCourseScheduleInput!) {
+  createCourseSchedule(createCourseScheduleInput: $createCourseScheduleInput) {
+    coursesId
+    days
+    endDate
+    endTime
+    id
+    name
+    slug
+    startDate
+    startTime
+    updatedAt
+    isLocked
+  }
+}
+
+mutation UpdateCourseSchedule($updateCourseScheduleInput: UpdateCourseScheduleInput!) {
+  updateCourseSchedule(updateCourseScheduleInput: $updateCourseScheduleInput) {
+    id
+    name
+    coursesId
+    courseLevelId
+    isLocked
+  }
+}
+
+query GetCourseScheduleDetails($courseScheduleId: Int!) {
+  courseSchedule(id: $courseScheduleId) {
+    id
+    name
+    isLocked
+    startDate
+    slug
+    startTime
+    students {
+      id
+      userId
+      name
+    }
+    days
+    endDate
+    endTime
+    coursesId
+    courseLevelId
+    attendanceSheet
+    attendanceProof
+    attendanceProofCreatedOn
+    examId
+    course {
+      median
+      maxStudentsAllowed
+    }
+  }
+}
+
+query GetCourseSchedule($courseScheduleId: Int!) {
+  courseSchedule(id: $courseScheduleId) {
+    id
+    name
+    startDate
+    slug
+    startTime
+    days
+    endDate
+    endTime
+    coursesId
+    courseLevelId
+    examId
+    isLocked
+  }
+}
+
+query GetMyStudentSchedules($input: GetMyStudentSchedulesInput) {
+  getMyStudentSchedules(input: $input) {
+    userId
+    name
+    status
+    id
+    courseScheduleId
+    slug
+    courseSchedule {
+      endTime
+      endDate
+      name
+      days
+      startDate
+      startTime
+      courseLevelId
+      coursesId
+      course {
+        name
+        id
+      }
+      courseLevel {
+        id
+        title
+      }
+    }
+    exams {
+      id
+      name
+      status
+      slug
+    }
+    completionPercentage
+  }
+}
+
+query CourseSchedules($pagingInput: PagingInput, $courseScheduleFilter: CourseScheduleFilter) {
+  courseSchedules(pagingInput: $pagingInput, courseScheduleFilter: $courseScheduleFilter) {
+    data {
+      course {
+        id
+        name
+      }
+      courseLevel {
+        id
+        level
+        title
+      }
+      endDate
+      endTime
+      id
+      name
+      slug
+      startDate
+      startTime
+    }
+    paging {
+      size
+      totalItems
+      totalPages
+      previousPage
+      orderBy
+      orderField
+      nextPage
+      hasPreviousPage
+      hasNextPage
+      currentPage
+    }
+  }
+}
+
+mutation SendCertificate($sendCertificateInput: SendCertificateInput!) {
+  sendCertificate(sendCertificateInput: $sendCertificateInput) {
+    message
+  }
+}
+
+mutation GetAttendanceSheet($getAttendanceSheetInput: GetAttendanceSheetInput) {
+  getAttendanceSheet(getAttendanceSheetInput: $getAttendanceSheetInput) {
+    url
+  }
+}
+
+query GetCourseScheduleOnly(
+  $pagingInput: PagingInput
+  $courseScheduleFilter: CourseScheduleFilter
+) {
+  courseSchedules(pagingInput: $pagingInput, courseScheduleFilter: $courseScheduleFilter) {
+    data {
+      id
+      name
+      startDate
+      slug
+      startTime
+      days
+      endDate
+      endTime
+      coursesId
+      courseLevelId
+      examId
+    }
+    paging {
+      size
+      totalItems
+      totalPages
+      previousPage
+      orderBy
+      orderField
+      nextPage
+      hasPreviousPage
+      hasNextPage
+      currentPage
+    }
+  }
+}

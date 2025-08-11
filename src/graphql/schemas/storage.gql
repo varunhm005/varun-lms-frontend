@@ -1,0 +1,6 @@
+mutation CreateUploadSignedUrl($createUploadSignedUrlInput: CreateUploadSignedUrlInput!) {
+  createUploadSignedUrl(createUploadSignedUrlInput: $createUploadSignedUrlInput) {
+    signedUrl
+    url
+  }
+}

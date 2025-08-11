@@ -1,0 +1,27 @@
+mutation MakeFilePublic($path: String!) {
+  makeFilePublic(path: $path) {
+    url
+  }
+}
+
+query GetAllPermissions {
+  permissions {
+    data {
+      id
+      deleted
+      name
+      roleId
+      slug
+      updatedAt
+    }
+  }
+}
+
+mutation CreateUserNew($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
+    id
+    idNumber
+    idUrl
+    companyId
+  }
+}

@@ -1,0 +1,42 @@
+query GetNotifications($filter: NotificationFilter, $pagingInput: PagingInput) {
+  notifications(filter: $filter, pagingInput: $pagingInput) {
+    data {
+      path
+      contextId
+      contextType
+      createdAt
+      id
+      message
+      read
+      readOn
+      slug
+      receiverId
+      title
+      updatedAt
+    }
+    paging {
+      currentPage
+      hasNextPage
+      nextPage
+      hasPreviousPage
+      orderBy
+      orderField
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+  }
+}
+
+mutation MarkNotificationAsRead {
+  markNotificationAsRead {
+    message
+  }
+}
+
+query GetUnreadNotificationCount {
+  getUnreadNotificationCount {
+    count
+  }
+}

@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+
+# Your rule content
+This project is using antd as component library and tailwing for css

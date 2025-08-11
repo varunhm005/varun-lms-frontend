@@ -1,0 +1,38 @@
+mutation CreateAssessmentSkill($createAssessmentSkillInput: CreateAssessmentSkillInput!) {
+  createAssessmentSkill(createAssessmentSkillInput: $createAssessmentSkillInput) {
+    name
+    id
+  }
+}
+
+mutation UpdateAssessmentSkill($updateAssessmentSkillInput: UpdateAssessmentSkillInput!) {
+  updateAssessmentSkill(updateAssessmentSkillInput: $updateAssessmentSkillInput) {
+    id
+    name
+  }
+}
+
+query GetAssessmentSkills {
+  assessmentSkills {
+    name
+    id
+    slug
+    createdAt
+    updatedAt
+  }
+}
+
+query GetCourseAssessmentSkills($courseId: Int!) {
+  course(id: $courseId) {
+    id
+    name
+    slug
+    courseAssessmentSkills {
+      assessmentSkill {
+        name
+        id
+        slug
+      }
+    }
+  }
+}

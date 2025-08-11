@@ -1,0 +1,118 @@
+mutation CreateCertificate($createCertificateInput: CreateCertificateInput!) {
+  createCertificate(createCertificateInput: $createCertificateInput) {
+    batchNumber
+    certificateType
+    companyId
+    coursesId
+    createdAt
+    id
+    imageUrl
+    name
+    slug
+  }
+}
+
+query GetCertificates($pagingInput: PagingInput, $certificateFilter: CertificateFilters) {
+  certificates(pagingInput: $pagingInput, certificateFilter: $certificateFilter) {
+    paging {
+      currentPage
+      hasNextPage
+      hasPreviousPage
+      nextPage
+      orderBy
+      orderField
+      previousPage
+      size
+      totalItems
+      totalPages
+    }
+    data {
+      certificateType
+      batchNumber
+      companyId
+      coursesId
+      courses {
+        id
+        name
+      }
+      id
+      createdAt
+      imageUrl
+      name
+      sealTitle
+      sealUrl
+      slug
+      updatedAt
+      userId
+      owner {
+        id
+        name
+      }
+    }
+  }
+}
+
+query GetCertificateDetails($certificateId: Int!) {
+  certificate(id: $certificateId) {
+    batchNumber
+    certificateType
+    companyId
+    coursesId
+    createdAt
+    deleted
+    id
+    imageUrl
+    name
+    sealTitle
+    sealUrl
+    signatures
+    slug
+    updatedAt
+    certificateUrl
+    userId
+    courses {
+      id
+      name
+      certificateType
+      functionName
+      caaApprovalNo
+    }
+    CertificateSignatures {
+      certificatesId
+      designation
+      id
+      name
+      signatureUrl
+      slug
+    }
+    owner {
+      id
+      name
+      idNumber
+    }
+    studentId
+    student {
+      courseSchedule {
+        startDate
+        endDate
+      }
+    }
+  }
+}
+
+mutation UpdateCertificate($updateCertificateInput: UpdateCertificateInput!) {
+  updateCertificate(updateCertificateInput: $updateCertificateInput) {
+    coursesId
+    companyId
+    certificateType
+    batchNumber
+    id
+    name
+  }
+}
+
+mutation RequestCertificate($examId: Int!) {
+  requestCertificate(examId: $examId) {
+    message
+  }
+}

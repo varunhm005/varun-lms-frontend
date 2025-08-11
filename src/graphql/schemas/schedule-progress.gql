@@ -1,0 +1,14 @@
+mutation UpdateScheduleProgress($updateScheduleProgressInput: UpdateScheduleProgressInput!) {
+  updateScheduleProgress(updateScheduleProgressInput: $updateScheduleProgressInput) {
+    id
+    courseScheduleStudentId
+    slug
+    status
+    coursesId
+    courseLevelId
+    chaptersId
+    activityStatus
+    createdAt
+    userId
+  }
+}

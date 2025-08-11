@@ -1,0 +1,176 @@
+query GetScheduleStudent($slug: ID!) {
+  scheduleStudent(slug: $slug) {
+    id
+    name
+    slug
+    updatedAt
+    courseScheduleId
+    courseSchedule {
+      course {
+        name
+        price
+        code
+        courseCategoryId
+        median
+        courseCategory {
+          id
+          name
+        }
+        courseStatus
+        id
+        examRequired
+        imageUrl
+        instructorId
+        instructor {
+          id
+          name
+        }
+        type
+        mediumOfExam
+      }
+      courseLevel {
+        id
+        slug
+        title
+      }
+      id
+      endDate
+      endTime
+      days
+      courseLevelId
+      coursesId
+      startDate
+      startTime
+      name
+    }
+    completionPercentage
+    status
+    exams {
+      id
+      name
+      status
+      slug
+      createdAt
+      achivedMark
+      totalMark
+    }
+  }
+}
+
+mutation UpdateScheduleStudent($updateScheduleStudentInput: UpdateScheduleStudentInput!) {
+  updateScheduleStudent(updateScheduleStudentInput: $updateScheduleStudentInput) {
+    id
+    name
+    slug
+    courseScheduleId
+  }
+}
+
+query GetScheduleStudentDetails($slug: ID!) {
+  scheduleStudent(slug: $slug) {
+    id
+    name
+    slug
+    updatedAt
+    courseScheduleId
+    progress {
+      chaptersId
+      activityStatus
+      coursesId
+      courseLevelId
+      createdAt
+      deleted
+      deletedAt
+      id
+      courseScheduleStudentId
+      status
+      lessonStatus
+    }
+    courseSchedule {
+      course {
+        name
+        price
+        code
+        courseCategoryId
+        median
+        examRequired
+        courseCategory {
+          id
+          name
+        }
+        courseStatus
+        id
+        examRequired
+        imageUrl
+        instructorId
+        Summary
+        instructor {
+          id
+          name
+        }
+        type
+      }
+      courseLevel {
+        id
+        slug
+        title
+        chapters {
+          name
+          slug
+          link
+          keyLearning
+          id
+          createdAt
+          chapterType
+          Questions {
+            answersOptions
+            id
+            question
+          }
+        }
+      }
+      id
+      endDate
+      endTime
+      days
+      courseLevelId
+      coursesId
+      startDate
+      startTime
+      name
+    }
+    completionPercentage
+    status
+    exams {
+      id
+      name
+      status
+      slug
+    }
+  }
+}
+
+query GetScheduleStudentName($getScheduleStudentInput: GetScheduleStudentInput) {
+  scheduleStudents(getScheduleStudentInput: $getScheduleStudentInput) {
+    id
+    name
+    userId
+    user {
+      id
+      name
+      idNumber
+    }
+    status
+    completionPercentage
+    slug
+    startedOn
+    courseScheduleId
+  }
+}
+
+mutation CreateScheduleStudent($createScheduleStudentInput: CreateScheduleStudentInput!) {
+  createScheduleStudent(createScheduleStudentInput: $createScheduleStudentInput) {
+    id
+    name
+  }
+}
