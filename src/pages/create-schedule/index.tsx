@@ -2,7 +2,9 @@ import { Button, Card, DatePicker, Form, Input, Modal, Select, Switch, TimePicke
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useLazyQuery } from '@apollo/client';
 import ScheduleCalendar from '../../components/course-schedule/schedule-calendar';
+import { GET_STUDENTS_BY_DESIGNATION } from '../../graphql/queries/designation-students';
 import FullScreenLoading from '../../components/loading/FullScreenLoading';
 import { queryKeys } from '../../constants/query-keys';
 import { route } from '../../constants/routes';
@@ -18,12 +20,14 @@ import {
   useGetCourseScheduleDetailsLazyQuery,
   useGetStudentsExpiredInCourseLazyQuery,
   useUpdateCourseScheduleMutation,
+  useGetDesignationsQuery
 } from '../../graphql/@generated/graphql';
 import { useStudents } from '../../hooks/useGetUsers';
 import { showErrorMessage } from '../../utils/utils';
 
 function CreateSchedule() {
   const [form] = Form.useForm<CreateCourseScheduleInput>();
+  const [selectedDesignationIds, setSelectedDesignationIds] = useState<number[]>([]);
 
   const { levelId, scheduleId } = useParams<{ levelId: string; scheduleId: string }>();
   const [level, setLevel] = useState<string | null>(levelId || null);
@@ -37,6 +41,10 @@ function CreateSchedule() {
       // TODO: handle error
     },
   });
+
+  useEffect(() => {
+    console.log('selectedDesignationIds', selectedDesignationIds, level);
+  }, [selectedDesignationIds]);
 
   const maxStudents = courseLevel?.courseLevel?.course?.maxStudentsAllowed;
 
@@ -113,6 +121,35 @@ function CreateSchedule() {
 
   const { data: users, loading: userLoading } = useStudents();
 
+  const { data: designations, loading: designationLoading, refetch: refetchDesignations } = useGetDesignationsQuery({
+    variables: {
+      pagingInput: {
+        page: 1,
+        size: 1000,
+      },
+    },
+  });
+
+  // Query to get students by designation
+  const [getStudentsByDesignation] = useLazyQuery(
+    GET_STUDENTS_BY_DESIGNATION,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted: (data) => {
+        if (data?.getStudentsByDesignation) {
+          const students = data.getStudentsByDesignation as UserBase[];
+
+          console.log('students', students);
+          selectUsers(students);
+        }
+      },
+      onError: (error) => {
+        console.error('Error fetching students by designation:', error);
+        showErrorMessage(error);
+      },
+    }
+  );
+
   const navigate = useNavigate();
 
   const handleCancel = (id: string) => {
@@ -145,7 +182,7 @@ function CreateSchedule() {
     onCompleted(data) {
       const schedule = data.courseSchedule!;
       setLevel(`${schedule.courseLevelId}`);
-
+      const designationValues = (schedule as any).designationIds.map(String);
       form.setFieldsValue({
         name: schedule.name,
         days: [],
@@ -156,11 +193,13 @@ function CreateSchedule() {
         students: schedule.students!.map((student) => student!.userId as any),
         examId: (schedule.examId ? `${schedule.examId}` : null) as any,
         isLocked: schedule.isLocked,
+        designationIds: designationValues || [],
       });
     },
   });
 
   const onFinish = (values: CreateCourseScheduleInput) => {
+    const designationIds = values.designationIds?.map(Number) || [];
     if (!idEdit) {
       createCourseScheduleMutation({
         variables: {
@@ -175,6 +214,7 @@ function CreateSchedule() {
             students: values.students,
             examId: Number(values.examId),
             isLocked: values.isLocked,
+            designationIds: designationIds,
           },
         },
       });
@@ -192,6 +232,7 @@ function CreateSchedule() {
             id: Number(scheduleId),
             examId: Number(values.examId),
             isLocked: values.isLocked,
+            designationIds: designationIds,
           },
         },
       });
@@ -216,6 +257,7 @@ function CreateSchedule() {
   useEffect(() => {
     if (idEdit) {
       getCourseScheduleDetails();
+      refetchDesignations();
     }
   }, [idEdit, getCourseScheduleDetails]);
 
@@ -364,6 +406,117 @@ function CreateSchedule() {
             </Form.Item>
           </div> */}
             <Form.Item
+              rules={[{ required: false, message: 'Please select at least one designation!' }]}
+              name="designationIds"
+              label={
+                <div className="flex items-center">
+                  <span>Designation</span>
+                </div>
+              }
+            >
+              <Select
+                className="rounded-select !rounded-full"
+                mode="multiple"
+                placeholder="Select designations"
+                optionFilterProp="label"
+                showSearch
+                loading={designationLoading}
+                onChange={(selectedIds) => {
+                  const previousDesignationIds = selectedDesignationIds;
+                  const isAddingDesignations = selectedIds.length > previousDesignationIds.length;
+                  
+                  setSelectedDesignationIds(selectedIds.map(Number));
+                  
+                  // If designations are selected, fetch students by designation
+                  if (selectedIds && selectedIds.length > 0 && level) {
+                    // Only show confirmation when adding designations (not when removing)
+                    if (isAddingDesignations) {
+                      // Check if there are already selected students
+                      const currentStudents = form.getFieldValue('students')?.length > 0;
+                      
+                      if (currentStudents) {
+                        Modal.confirm({
+                          centered: true,
+                          okButtonProps: {
+                            danger: true,
+                          },
+                          title:
+                            'Are you sure you want to replace the current values?',
+                          onOk: () => {
+                            getStudentsByDesignation({
+                              variables: {
+                                courseLevelId: Number(level),
+                                designationIds: selectedIds.map(Number),
+                              },
+                            });
+                          },
+                          onCancel: () => {
+                            // Remove the latest selected designation when cancel is clicked
+                            const latestSelectedId = selectedIds[selectedIds.length - 1];
+                            const filteredIds = selectedIds.filter((id: any) => id !== latestSelectedId);
+
+                            form.setFieldsValue({
+                              designationIds: filteredIds,
+                            });
+                            setSelectedDesignationIds(filteredIds.map(Number));
+                          },
+                        });
+                      } else {
+                        getStudentsByDesignation({
+                          variables: {
+                            courseLevelId: Number(level),
+                            designationIds: selectedIds.map(Number),
+                          },
+                        });
+                      }
+                    } else {
+                      // When removing designations, just fetch students for remaining designations
+                      getStudentsByDesignation({
+                        variables: {
+                          courseLevelId: Number(level),
+                          designationIds: selectedIds.map(Number),
+                        },
+                      });
+                    }
+                  } 
+                  // else {
+                  //   Modal.confirm({
+                  //     centered: true,
+                  //     okButtonProps: {
+                  //       danger: true,
+                  //     },
+                  //     title:
+                  //       'Are you sure you want to clear the selection?. If ',
+                  //     onOk: () => {
+                  //       form.setFieldsValue({
+                  //         students: [],
+                  //       });
+                  //     },
+                  //     onCancel: () => {
+                  //       form.setFieldsValue({
+                  //         designationIds: (previousDesignationIds as any).previousDesignationIds.map(String),
+                  //       });
+                  //       setSelectedDesignationIds(previousDesignationIds);
+                  //     },
+                  //   });
+                  // }
+                }
+              }
+                filterOption={(input, option) => {
+                  return `${option?.children}`.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+                }}
+              >
+                {designations?.designations?.data?.map((designation) => (
+                  <Select.Option
+                    key={designation?.id}
+                    value={designation?.id}
+                  >
+                    {designation?.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
               rules={[{ required: true, message: 'Please input your Employee!' }]}
               name="students"
               label={
@@ -382,6 +535,7 @@ function CreateSchedule() {
                 className="rounded-select !rounded-full"
                 mode="multiple"
                 placeholder="Students"
+                loading={getNotAttendedOptions.loading || getExpiredUsersOptions.loading}
                 // options={users?.users?.data?.map((d) => ({
                 //   value: d!.id!,
                 //   label: `${d!.name!} ${d?.idNumber}`,
@@ -438,6 +592,7 @@ function CreateSchedule() {
                             getNotAttended({
                               variables: {
                                 courseLevelId: Number(level),
+                                designationIds: selectedDesignationIds,
                               },
                             });
                           },
@@ -446,6 +601,7 @@ function CreateSchedule() {
                         getNotAttended({
                           variables: {
                             courseLevelId: Number(level),
+                            designationIds: selectedDesignationIds,
                           },
                         });
                       }
@@ -469,6 +625,7 @@ function CreateSchedule() {
                             getExpiredUsers({
                               variables: {
                                 courseLevelId: Number(level),
+                                designationIds: selectedDesignationIds,
                               },
                             });
                           },
@@ -477,6 +634,7 @@ function CreateSchedule() {
                         getExpiredUsers({
                           variables: {
                             courseLevelId: Number(level),
+                            designationIds: selectedDesignationIds,
                           },
                         });
                       }

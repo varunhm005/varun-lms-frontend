@@ -768,6 +768,7 @@ export type CreateCourseScheduleInput = {
   startDate?: InputMaybe<Scalars['Date']['input']>;
   startTime?: InputMaybe<Scalars['Date']['input']>;
   students: Array<Scalars['ID']['input']>;
+  designationIds?: Array<Scalars['Int']['input']>;
 };
 
 export type CreateDepartmentInput = {
@@ -2593,6 +2594,7 @@ export type UpdateCourseScheduleInput = {
   startDate?: InputMaybe<Scalars['Date']['input']>;
   startTime?: InputMaybe<Scalars['Date']['input']>;
   students?: InputMaybe<Array<Scalars['ID']['input']>>;
+  designationIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 export type UpdateDepartmentInput = {
@@ -3876,6 +3878,7 @@ export type GetCourseDetailsWithLevelIdQuery = {
 
 export type GetCourseLevelNotAttendedUserQueryVariables = Exact<{
   courseLevelId: Scalars['Int']['input'];
+  designationIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 }>;
 
 export type GetCourseLevelNotAttendedUserQuery = {
@@ -3890,6 +3893,7 @@ export type GetCourseLevelNotAttendedUserQuery = {
 
 export type GetStudentsExpiredInCourseQueryVariables = Exact<{
   courseLevelId: Scalars['Int']['input'];
+  designationIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 }>;
 
 export type GetStudentsExpiredInCourseQuery = {
@@ -3977,6 +3981,7 @@ export type CreateCourseScheduleMutation = {
     startTime?: any | null;
     updatedAt: any;
     isLocked?: boolean | null;
+    designationIds?: Array<number> | null;
   };
 };
 
@@ -3993,6 +3998,7 @@ export type UpdateCourseScheduleMutation = {
     coursesId?: string | null;
     courseLevelId?: string | null;
     isLocked?: boolean | null;
+    designationIds?: Array<number> | null;
   };
 };
 
@@ -4003,6 +4009,7 @@ export type GetCourseScheduleDetailsQueryVariables = Exact<{
 export type GetCourseScheduleDetailsQuery = {
   __typename?: 'Query';
   courseSchedule?: {
+    designationIds(designationIds: any): unknown;
     __typename?: 'CourseSchedule';
     id: string;
     name: string;
@@ -4031,6 +4038,7 @@ export type GetCourseScheduleDetailsQuery = {
       maxStudentsAllowed?: number | null;
     } | null;
   } | null;
+  designationIds?: Array<number> | null;
 };
 
 export type GetCourseScheduleQueryVariables = Exact<{
@@ -4053,6 +4061,7 @@ export type GetCourseScheduleQuery = {
     courseLevelId?: string | null;
     examId?: number | null;
     isLocked?: boolean | null;
+    designationIds?: Array<number> | null;
   } | null;
 };
 
@@ -8324,8 +8333,8 @@ export type GetCourseDetailsWithLevelIdQueryResult = Apollo.QueryResult<
   GetCourseDetailsWithLevelIdQueryVariables
 >;
 export const GetCourseLevelNotAttendedUserDocument = gql`
-  query GetCourseLevelNotAttendedUser($courseLevelId: Int!) {
-    courseLevelNotAttendedUser(courseLevelId: $courseLevelId) {
+  query GetCourseLevelNotAttendedUser($courseLevelId: Int!, $designationIds: [Int!]) {
+    courseLevelNotAttendedUser(courseLevelId: $courseLevelId, designationIds: $designationIds) {
       id
       name
       slug
@@ -8384,8 +8393,8 @@ export type GetCourseLevelNotAttendedUserQueryResult = Apollo.QueryResult<
   GetCourseLevelNotAttendedUserQueryVariables
 >;
 export const GetStudentsExpiredInCourseDocument = gql`
-  query GetStudentsExpiredInCourse($courseLevelId: Int!) {
-    getStudentsExpiredInCourse(courseLevelId: $courseLevelId) {
+  query GetStudentsExpiredInCourse($courseLevelId: Int!, $designationIds: [Int!]) {
+    getStudentsExpiredInCourse(courseLevelId: $courseLevelId, designationIds: $designationIds) {
       id
       name
       slug
@@ -8755,6 +8764,7 @@ export const GetCourseScheduleDetailsDocument = gql`
       attendanceProof
       attendanceProofCreatedOn
       examId
+      designationIds
       course {
         median
         maxStudentsAllowed
