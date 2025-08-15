@@ -83,15 +83,16 @@ export default function ScheduleStudents() {
                     View
                   </Button>
                 </Link>
-                {
-                  (roleName === 'Admin' || roleName === 'Faculty') && record.completionPercentage !== 100 && (
-                    <Link to={`/${route.addAssessment}?scheduleId=${record.id}&courseId=${schedule?.courseSchedule?.coursesId}`}>
+                {(roleName === 'Admin' || roleName === 'Faculty') &&
+                  record.completionPercentage !== 100 && (
+                    <Link
+                      to={`/${route.addAssessment}?scheduleId=${record.id}&courseId=${schedule?.courseSchedule?.coursesId}`}
+                    >
                       <Button size="small" type="primary">
                         Mark as Complete
                       </Button>
                     </Link>
-                  )
-                }
+                  )}
               </div>
             );
           }}

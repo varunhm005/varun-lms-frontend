@@ -20,7 +20,7 @@ import {
   useGetCourseScheduleDetailsLazyQuery,
   useGetStudentsExpiredInCourseLazyQuery,
   useUpdateCourseScheduleMutation,
-  useGetDesignationsQuery
+  useGetDesignationsQuery,
 } from '../../graphql/@generated/graphql';
 import { useStudents } from '../../hooks/useGetUsers';
 import { showErrorMessage } from '../../utils/utils';
@@ -41,10 +41,6 @@ function CreateSchedule() {
       // TODO: handle error
     },
   });
-
-  useEffect(() => {
-    console.log('selectedDesignationIds', selectedDesignationIds, level);
-  }, [selectedDesignationIds]);
 
   const maxStudents = courseLevel?.courseLevel?.course?.maxStudentsAllowed;
 
@@ -121,7 +117,11 @@ function CreateSchedule() {
 
   const { data: users, loading: userLoading } = useStudents();
 
-  const { data: designations, loading: designationLoading, refetch: refetchDesignations } = useGetDesignationsQuery({
+  const {
+    data: designations,
+    loading: designationLoading,
+    refetch: refetchDesignations,
+  } = useGetDesignationsQuery({
     variables: {
       pagingInput: {
         page: 1,
@@ -131,24 +131,21 @@ function CreateSchedule() {
   });
 
   // Query to get students by designation
-  const [getStudentsByDesignation] = useLazyQuery(
-    GET_STUDENTS_BY_DESIGNATION,
-    {
-      fetchPolicy: 'network-only',
-      onCompleted: (data) => {
-        if (data?.getStudentsByDesignation) {
-          const students = data.getStudentsByDesignation as UserBase[];
+  const [getStudentsByDesignation] = useLazyQuery(GET_STUDENTS_BY_DESIGNATION, {
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      if (data?.getStudentsByDesignation) {
+        const students = data.getStudentsByDesignation as UserBase[];
 
-          console.log('students', students);
-          selectUsers(students);
-        }
-      },
-      onError: (error) => {
-        console.error('Error fetching students by designation:', error);
-        showErrorMessage(error);
-      },
-    }
-  );
+        // Log students for debugging
+        selectUsers(students);
+      }
+    },
+    onError: (error) => {
+      // Log error for debugging
+      showErrorMessage(error);
+    },
+  });
 
   const navigate = useNavigate();
 
@@ -214,7 +211,7 @@ function CreateSchedule() {
             students: values.students,
             examId: Number(values.examId),
             isLocked: values.isLocked,
-            designationIds: designationIds,
+            designationIds,
           },
         },
       });
@@ -232,7 +229,7 @@ function CreateSchedule() {
             id: Number(scheduleId),
             examId: Number(values.examId),
             isLocked: values.isLocked,
-            designationIds: designationIds,
+            designationIds,
           },
         },
       });
@@ -259,7 +256,7 @@ function CreateSchedule() {
       getCourseScheduleDetails();
       refetchDesignations();
     }
-  }, [idEdit, getCourseScheduleDetails]);
+  }, [idEdit, getCourseScheduleDetails, refetchDesignations]);
 
   if (userLoading || courseScheduleDetailsLoading || courseLevelLoading || examLoading) {
     return <FullScreenLoading />;
@@ -424,24 +421,23 @@ function CreateSchedule() {
                 onChange={(selectedIds) => {
                   const previousDesignationIds = selectedDesignationIds;
                   const isAddingDesignations = selectedIds.length > previousDesignationIds.length;
-                  
+
                   setSelectedDesignationIds(selectedIds.map(Number));
-                  
+
                   // If designations are selected, fetch students by designation
                   if (selectedIds && selectedIds.length > 0 && level) {
                     // Only show confirmation when adding designations (not when removing)
                     if (isAddingDesignations) {
                       // Check if there are already selected students
                       const currentStudents = form.getFieldValue('students')?.length > 0;
-                      
+
                       if (currentStudents) {
                         Modal.confirm({
                           centered: true,
                           okButtonProps: {
                             danger: true,
                           },
-                          title:
-                            'Are you sure you want to replace the current values?',
+                          title: 'Are you sure you want to replace the current values?',
                           onOk: () => {
                             getStudentsByDesignation({
                               variables: {
@@ -453,7 +449,9 @@ function CreateSchedule() {
                           onCancel: () => {
                             // Remove the latest selected designation when cancel is clicked
                             const latestSelectedId = selectedIds[selectedIds.length - 1];
-                            const filteredIds = selectedIds.filter((id: any) => id !== latestSelectedId);
+                            const filteredIds = selectedIds.filter(
+                              (id: any) => id !== latestSelectedId
+                            );
 
                             form.setFieldsValue({
                               designationIds: filteredIds,
@@ -478,7 +476,7 @@ function CreateSchedule() {
                         },
                       });
                     }
-                  } 
+                  }
                   // else {
                   //   Modal.confirm({
                   //     centered: true,
@@ -500,17 +498,13 @@ function CreateSchedule() {
                   //     },
                   //   });
                   // }
-                }
-              }
+                }}
                 filterOption={(input, option) => {
                   return `${option?.children}`.toLowerCase().indexOf(input.toLowerCase()) >= 0;
                 }}
               >
                 {designations?.designations?.data?.map((designation) => (
-                  <Select.Option
-                    key={designation?.id}
-                    value={designation?.id}
-                  >
+                  <Select.Option key={designation?.id} value={designation?.id}>
                     {designation?.name}
                   </Select.Option>
                 ))}
