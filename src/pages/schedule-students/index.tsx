@@ -34,7 +34,8 @@ export default function ScheduleStudents() {
 
   const { data: profile } = useGetUserProfileQuery();
 
-  const { markAsComplete, loading: markCompleteLoading } = useUpdateScheduleStudentForOfflineCourse();
+  const { markAsComplete, loading: markCompleteLoading } =
+    useUpdateScheduleStudentForOfflineCourse();
 
   const profileData = profile?.getUserProfile;
   const roleName = profileData!.role!.name;
@@ -44,7 +45,7 @@ export default function ScheduleStudents() {
       setRefreshing(true);
       await markAsComplete(record.id!.toString());
       message.success('Course marked as complete successfully!');
-      
+
       // Refresh the data to show updated completion percentage
       await refetch();
     } catch (error) {
@@ -120,7 +121,8 @@ export default function ScheduleStudents() {
                     View
                   </Button>
                 </Link>
-                {(roleName === 'Admin' || roleName === 'Faculty') && record.course?.median === "Offline" &&
+                {(roleName === 'Admin' || roleName === 'Faculty') &&
+                  record.course?.median === 'Offline' &&
                   record.completionPercentage !== 100 && (
                     <Button
                       size="small"

@@ -1,7 +1,10 @@
-import { ScheduleStudentStatus, useUpdateScheduleStudentForOfflineCourseMutation } from '../graphql/@generated/graphql';
+import {
+  ScheduleStudentStatus,
+  useUpdateScheduleStudentForOfflineCourseMutation,
+} from '../graphql/@generated/graphql';
 
 export const useUpdateScheduleStudentForOfflineCourse = () => {
-  const [updateScheduleStudentForOfflineCourse, { loading, error, data }] = 
+  const [updateScheduleStudentForOfflineCourse, { loading, error, data }] =
     useUpdateScheduleStudentForOfflineCourseMutation();
 
   const markAsComplete = async (id: string) => {
@@ -10,9 +13,9 @@ export const useUpdateScheduleStudentForOfflineCourse = () => {
         variables: {
           updateScheduleStudentForOfflineCourseInput: {
             id,
-            status: ScheduleStudentStatus.Completed
-          }
-        }
+            status: ScheduleStudentStatus.Completed,
+          },
+        },
       });
       return result;
     } catch (err) {
@@ -25,6 +28,6 @@ export const useUpdateScheduleStudentForOfflineCourse = () => {
     markAsComplete,
     loading,
     error,
-    data
+    data,
   };
 };
