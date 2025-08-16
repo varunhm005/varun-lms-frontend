@@ -588,7 +588,7 @@ export type CourseSchedule = {
   startDate?: Maybe<Scalars['Date']['output']>;
   startTime?: Maybe<Scalars['Date']['output']>;
   students?: Maybe<Array<Maybe<ScheduleStudent>>>;
-  updatedAt: Scalars['String']['output'];
+  updatedAt: Scalars['Date']['output'];
 };
 
 export type CourseScheduleFilter = {
