@@ -165,6 +165,11 @@ query GetScheduleStudentName($getScheduleStudentInput: GetScheduleStudentInput) 
     slug
     startedOn
     courseScheduleId
+    course {
+        id
+        name
+        median
+    }
   }
 }
 
@@ -172,5 +177,17 @@ mutation CreateScheduleStudent($createScheduleStudentInput: CreateScheduleStuden
   createScheduleStudent(createScheduleStudentInput: $createScheduleStudentInput) {
     id
     name
+  }
+}
+
+mutation UpdateScheduleStudentForOfflineCourse($updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput!) {
+  updateScheduleStudentOfflineCourse(
+    updateScheduleStudentForOfflineCourseInput: $updateScheduleStudentForOfflineCourseInput
+  ) {
+    id
+    name
+    slug
+    courseScheduleId
+    __typename
   }
 }

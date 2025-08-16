@@ -1,5 +1,6 @@
-import { Button, Progress, Table } from 'antd';
+import { Button, Progress, Table, message, Modal } from 'antd';
 import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import FullScreenLoading from '../../components/loading/FullScreenLoading';
 import { route } from '../../constants/routes';
 import {
@@ -8,13 +9,16 @@ import {
   useGetScheduleStudentNameQuery,
   useGetUserProfileQuery,
 } from '../../graphql/@generated/graphql';
+import { useUpdateScheduleStudentForOfflineCourse } from '../../hooks/useUpdateScheduleStudentForOfflineCourse';
 
 export default function ScheduleStudents() {
   const { scheduleId } = useParams<{
     scheduleId: string;
   }>();
 
-  const { data, loading } = useGetScheduleStudentNameQuery({
+  const [refreshing, setRefreshing] = useState(false);
+
+  const { data, loading, refetch } = useGetScheduleStudentNameQuery({
     variables: {
       getScheduleStudentInput: {
         courseScheduleId: Number(scheduleId),
@@ -30,8 +34,41 @@ export default function ScheduleStudents() {
 
   const { data: profile } = useGetUserProfileQuery();
 
+  const { markAsComplete, loading: markCompleteLoading } = useUpdateScheduleStudentForOfflineCourse();
+
   const profileData = profile?.getUserProfile;
   const roleName = profileData!.role!.name;
+
+  const handleMarkAsComplete = async (record: ScheduleStudent) => {
+    try {
+      setRefreshing(true);
+      await markAsComplete(record.id!.toString());
+      message.success('Course marked as complete successfully!');
+      
+      // Refresh the data to show updated completion percentage
+      await refetch();
+    } catch (error) {
+      message.error('Failed to mark course as complete. Please try again.');
+      console.error('Error marking course as complete:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const showConfirmModal = (record: ScheduleStudent) => {
+    Modal.confirm({
+      title: 'Confirmation',
+      content: `Are you sure you want to mark this as complete?`,
+      okText: 'Yes, Mark as Complete',
+      cancelText: 'Cancel',
+      okType: 'primary',
+      onOk: () => handleMarkAsComplete(record),
+      onCancel: () => {
+        // Modal automatically closes when Cancel is clicked
+        // This callback is optional - Ant Design handles the closing automatically
+      },
+    });
+  };
 
   if (loading || scheduleLoading) {
     return <FullScreenLoading />;
@@ -83,15 +120,16 @@ export default function ScheduleStudents() {
                     View
                   </Button>
                 </Link>
-                {(roleName === 'Admin' || roleName === 'Faculty') &&
+                {(roleName === 'Admin' || roleName === 'Faculty') && record.course?.median === "Offline" &&
                   record.completionPercentage !== 100 && (
-                    <Link
-                      to={`/${route.addAssessment}?scheduleId=${record.id}&courseId=${schedule?.courseSchedule?.coursesId}`}
+                    <Button
+                      size="small"
+                      type="primary"
+                      disabled={markCompleteLoading || refreshing}
+                      onClick={() => showConfirmModal(record)}
                     >
-                      <Button size="small" type="primary">
-                        Mark as Complete
-                      </Button>
-                    </Link>
+                      Mark as Complete
+                    </Button>
                   )}
               </div>
             );

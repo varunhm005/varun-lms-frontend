@@ -588,7 +588,7 @@ export type CourseSchedule = {
   startDate?: Maybe<Scalars['Date']['output']>;
   startTime?: Maybe<Scalars['Date']['output']>;
   students?: Maybe<Array<Maybe<ScheduleStudent>>>;
-  updatedAt: Scalars['Date']['output'];
+  updatedAt: Scalars['String']['output'];
 };
 
 export type CourseScheduleFilter = {
@@ -1087,6 +1087,7 @@ export type GetScheduleStudentInput = {
   startDate?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<ScheduleStudentStatus>;
   userId?: InputMaybe<Scalars['Int']['input']>;
+  course?: Maybe<Course>;
 };
 
 export enum Language {
@@ -1642,6 +1643,10 @@ export type MutationUpdateScheduleProgressArgs = {
 
 export type MutationUpdateScheduleStudentArgs = {
   updateScheduleStudentInput: UpdateScheduleStudentInput;
+};
+
+export type MutationUpdateScheduleStudentForOfflineCourseArgs = {
+  updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput;
 };
 
 export type MutationUpdateUserArgs = {
@@ -2366,6 +2371,7 @@ export type ScheduleStudent = {
   updatedAt: Scalars['String']['output'];
   user: User;
   userId: Scalars['Int']['output'];
+  course?: Maybe<Course>;
 };
 
 export enum ScheduleStudentStatus {
@@ -2687,6 +2693,11 @@ export type UpdateScheduleProgressInput = {
 export type UpdateScheduleStudentInput = {
   id: Scalars['ID']['input'];
   status?: InputMaybe<ScheduleStudentStatus>;
+};
+
+export type UpdateScheduleStudentForOfflineCourseInput = {
+  id: Scalars['ID']['input'];
+  status: ScheduleStudentStatus;
 };
 
 export type UpdateUserInput = {
@@ -5137,6 +5148,21 @@ export type UpdateScheduleStudentMutation = {
   };
 };
 
+export type UpdateScheduleStudentForOfflineCourseMutationVariables = Exact<{
+  updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput;
+}>;
+
+export type UpdateScheduleStudentForOfflineCourseMutation = {
+  __typename?: 'Mutation';
+  updateScheduleStudentOfflineCourse: {
+    __typename?: 'ScheduleStudent';
+    id: string;
+    name: string;
+    slug: string;
+    courseScheduleId: number;
+  };
+};
+
 export type GetScheduleStudentDetailsQueryVariables = Exact<{
   slug: Scalars['ID']['input'];
 }>;
@@ -5243,6 +5269,7 @@ export type GetScheduleStudentNameQuery = {
     slug: string;
     startedOn?: string | null;
     courseScheduleId: number;
+    course?: Maybe<Course>;
     user: { __typename?: 'User'; id: number; name: string; idNumber: string };
   } | null>;
 };
@@ -11631,6 +11658,66 @@ export type UpdateScheduleStudentMutationOptions = Apollo.BaseMutationOptions<
   UpdateScheduleStudentMutation,
   UpdateScheduleStudentMutationVariables
 >;
+
+export const UpdateScheduleStudentForOfflineCourseDocument = gql`
+  mutation UpdateScheduleStudentForOfflineCourse($updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput!) {
+    updateScheduleStudentOfflineCourse(
+      updateScheduleStudentForOfflineCourseInput: $updateScheduleStudentForOfflineCourseInput
+    ) {
+      id
+      name
+      slug
+      courseScheduleId
+      __typename
+    }
+  }
+`;
+
+export type UpdateScheduleStudentForOfflineCourseMutationFn = Apollo.MutationFunction<
+  UpdateScheduleStudentForOfflineCourseMutation,
+  UpdateScheduleStudentForOfflineCourseMutationVariables
+>;
+
+/**
+ * __useUpdateScheduleStudentForOfflineCourseMutation__
+ *
+ * To run a mutation, you first call `useUpdateScheduleStudentForOfflineCourseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateScheduleStudentForOfflineCourseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateScheduleStudentForOfflineCourseMutation, { data, loading, error }] = useUpdateScheduleStudentForOfflineCourseMutation({
+ *   variables: {
+ *      updateScheduleStudentForOfflineCourseInput: // value for 'updateScheduleStudentForOfflineCourseInput'
+ *   },
+ * });
+ */
+export function useUpdateScheduleStudentForOfflineCourseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateScheduleStudentForOfflineCourseMutation,
+    UpdateScheduleStudentForOfflineCourseMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateScheduleStudentForOfflineCourseMutation, UpdateScheduleStudentForOfflineCourseMutationVariables>(
+    UpdateScheduleStudentForOfflineCourseDocument,
+    options
+  );
+}
+
+export type UpdateScheduleStudentForOfflineCourseMutationHookResult = ReturnType<
+  typeof useUpdateScheduleStudentForOfflineCourseMutation
+>;
+export type UpdateScheduleStudentForOfflineCourseMutationResult =
+  Apollo.MutationResult<UpdateScheduleStudentForOfflineCourseMutation>;
+export type UpdateScheduleStudentForOfflineCourseMutationOptions = Apollo.BaseMutationOptions<
+  UpdateScheduleStudentForOfflineCourseMutation,
+  UpdateScheduleStudentForOfflineCourseMutationVariables
+>;
+
 export const GetScheduleStudentDetailsDocument = gql`
   query GetScheduleStudentDetails($slug: ID!) {
     scheduleStudent(slug: $slug) {
@@ -11783,6 +11870,11 @@ export const GetScheduleStudentNameDocument = gql`
       slug
       startedOn
       courseScheduleId
+      course {
+        id
+        name
+        median
+      }
     }
   }
 `;
@@ -12671,5 +12763,6 @@ export const namedOperations = {
     updateUserProfile: 'updateUserProfile',
     UpdatePassword: 'UpdatePassword',
     BulkInsertUser: 'BulkInsertUser',
+    UpdateScheduleStudentForOfflineCourse: 'UpdateScheduleStudentForOfflineCourse',
   },
 };
