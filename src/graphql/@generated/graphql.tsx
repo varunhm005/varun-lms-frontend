@@ -3404,7 +3404,9 @@ export type GetCertificateYearsByCourseQuery = {
 };
 
 export type DownloadCertificatesQueryVariables = Exact<{
-  ids: Array<Scalars['Int']['input']> | Scalars['Int']['input'];
+  ids?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+  certificateFilter?: InputMaybe<CertificateFilters>;
+  download: Scalars['String']['input'];
 }>;
 
 export type DownloadCertificatesQuery = {
@@ -7071,8 +7073,8 @@ export const GetCertificateYearsByCourseDocument = gql`
 `;
 
 export const DownloadCertificatesDocument = gql`
-  query DownloadCertificates($ids: [Int!]!) {
-    downloadCertificates(ids: $ids)
+  query DownloadCertificates($ids: [Int!], $certificateFilter: CertificateFilters, $download: String!) {
+    downloadCertificates(ids: $ids, certificateFilter: $certificateFilter, download: $download)
   }
 `;
 

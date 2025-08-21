@@ -126,6 +126,6 @@ query GetCertificateYearsByCourse($search: String) {
   }
 }
 
-query DownloadCertificates($ids: [Int!]!) {
-  downloadCertificates(ids: $ids)
+query DownloadCertificates($ids: [Int!], $certificateFilter: CertificateFilters, $download: String!) {
+  downloadCertificates(ids: $ids, certificateFilter: $certificateFilter, download: $download)
 }

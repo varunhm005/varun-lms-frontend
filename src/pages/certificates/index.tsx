@@ -26,7 +26,7 @@ export default function Certificates() {
   const [certificateSearch, setCertificateSearch] = useState<string>('');
   const [debouncedCertificateSearch, setDebouncedCertificateSearch] = useState<string>('');
   const [selectedCertificates, setSelectedCertificates] = useState<string[]>([]);
-
+  const [isAllSelected, setIsAllSelected] = useState(false);
   const { page, size, query } = useParsedUrlQuery<{
     page: string;
     size: string;
@@ -86,7 +86,7 @@ export default function Certificates() {
 
   // Download certificates hook
   const [downloadCertificates, { loading: downloadLoading }] = useDownloadCertificatesLazyQuery();
-  
+
   const { setQueryParams: updateQueryParams } = useUrlQueryParam();
 
   // Transform the flat data into grouped course structure
@@ -172,8 +172,10 @@ export default function Certificates() {
     if (checked) {
       const allCertificateIds = (data?.certificates.data as Array<any>)?.map(cert => cert.id) || [];
       setSelectedCertificates(allCertificateIds);
+      setIsAllSelected(true);
     } else {
       setSelectedCertificates([]);
+      setIsAllSelected(false);
     }
   };
 
@@ -186,35 +188,43 @@ export default function Certificates() {
     }
   };
 
-    // Handle bulk download
+  // Handle bulk download
   const handleBulkDownload = async () => {
     if (selectedCertificates.length === 0) {
       // You can add a notification here
       console.log('No certificates selected for download');
       return;
     }
-    
+
     try {
-      console.log('Downloading certificates:', selectedCertificates);
-      
       // Convert string IDs to integers for the GraphQL query
       const certificateIds = selectedCertificates.map(id => parseInt(id));
-      
+      // Check if all certificates are selected (Select All is checked)
+      const isSelectAllChecked = isAllSelected;
+
       const result = await downloadCertificates({
         variables: {
-          ids: certificateIds
+          ids: certificateIds,
+          certificateFilter: {
+            instructorId: role === 'Faculty' ? Number(profile?.id) : undefined,
+            userId: filterRoles.includes(role) ? Number(profile?.id) : undefined,
+            search: debouncedCertificateSearch || undefined,
+            year: selectedYear?.year[0] ?? undefined,
+            coursesId: selectedCourse?.id ?? undefined,
+          },
+          download: isSelectAllChecked ? 'ALL' : ''
         }
       });
-      
+
       if (result.data?.downloadCertificates) {
         // Handle the download response
         console.log('Download response:', result.data.downloadCertificates);
-        
+
         // You can add logic here to:
         // 1. Trigger file download if it's a direct file URL
         // 2. Show success message
         // 3. Handle different response formats
-        
+
         // Example: If the response is a download URL
         if (result.data.downloadCertificates.startsWith('http') || result.data.downloadCertificates.startsWith('blob:')) {
           const link = document.createElement('a');
@@ -388,15 +398,15 @@ export default function Certificates() {
                       {selectedCertificates.length} certificate(s) selected
                     </span>
                   </div>
-                                     <Button
-                     type="primary"
-                     onClick={handleBulkDownload}
-                     loading={downloadLoading}
-                     disabled={downloadLoading}
-                     className="bg-blue-600 hover:bg-blue-700"
-                   >
-                     {downloadLoading ? 'Downloading...' : `Download Selected (${selectedCertificates.length})`}
-                   </Button>
+                  <Button
+                    type="primary"
+                    onClick={handleBulkDownload}
+                    loading={downloadLoading}
+                    disabled={downloadLoading}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    {downloadLoading ? 'Downloading...' : isAllSelected ? 'Download All' : `Download Selected (${selectedCertificates.length})`}
+                  </Button>
                 </div>
               </div>
             )}
@@ -409,7 +419,7 @@ export default function Certificates() {
                     <div className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedCertificates.length === (data?.certificates.data as Array<any>)?.length}
+                        checked={selectedCertificates.length === data?.certificates.paging?.totalItems}
                         onChange={(e) => handleSelectAll(e.target.checked)}
                         className="mr-2 cursor-pointer"
                       />
