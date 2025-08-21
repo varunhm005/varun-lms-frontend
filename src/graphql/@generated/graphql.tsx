@@ -313,7 +313,7 @@ export type CertificateFilters = {
   instructorId?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['Int']['input']>;
-  year?: InputMaybe<Scalars['String']['input']>;
+  year?: InputMaybe<Scalars['Int']['input']>;
   coursesId?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -3396,10 +3396,10 @@ export type GetCertificateYearsByCourseQueryVariables = Exact<{
 export type GetCertificateYearsByCourseQuery = {
   __typename?: 'Query';
   certificateYearsByCourse: Array<{
-    __typename?: 'CertificateYearByCourse';
+    __typename?: 'CertificateCourseYearGroup';
     courseName: string;
     coursesId: number;
-    year: string;
+    year: Array<number>;
   }>;
 };
 

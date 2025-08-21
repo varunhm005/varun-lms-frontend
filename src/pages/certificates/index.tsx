@@ -70,7 +70,7 @@ export default function Certificates() {
         instructorId: role === 'Faculty' ? Number(profile?.id) : undefined,
         userId: filterRoles.includes(role) ? Number(profile?.id) : undefined,
         search: debouncedCertificateSearch || undefined,
-        year: selectedYear?.year[0] ?? undefined,
+        year: selectedYear ? Number(selectedYear?.year) : undefined,
         coursesId: selectedCourse?.id ?? undefined,
       },
     },
@@ -89,33 +89,14 @@ export default function Certificates() {
 
   const { setQueryParams: updateQueryParams } = useUrlQueryParam();
 
-  // Transform the flat data into grouped course structure
+  // Transform API response (year is an array) into grouped course structure
   const courseList = useMemo(() => {
     if (!certificateYearsData?.certificateYearsByCourse) return [];
-
-    const groupedCourses = certificateYearsData.certificateYearsByCourse.reduce((acc: any[], item: any) => {
-      const existingCourse = acc.find(course => course.id === item.coursesId);
-
-      if (existingCourse) {
-        existingCourse.years.push({
-          id: `${item.coursesId}-${item.year}`,
-          year: item.year
-        });
-      } else {
-        acc.push({
-          id: item.coursesId,
-          course: item.courseName,
-          years: [{
-            id: `${item.coursesId}-${item.year}`,
-            year: item.year
-          }]
-        });
-      }
-
-      return acc;
-    }, []);
-
-    return groupedCourses;
+    return certificateYearsData.certificateYearsByCourse.map((item: any) => ({
+      id: item.coursesId,
+      course: item.courseName,
+      years: (item.year || []).map((y: number | string) => ({ id: `${item.coursesId}-${y}`, year: y }))
+    }));
   }, [certificateYearsData]);
 
   const handleTableChange = (
@@ -202,7 +183,7 @@ export default function Certificates() {
             instructorId: role === 'Faculty' ? Number(profile?.id) : undefined,
             userId: filterRoles.includes(role) ? Number(profile?.id) : undefined,
             search: debouncedCertificateSearch || undefined,
-            year: selectedYear?.year[0] ?? undefined,
+            year: selectedYear ? Number(selectedYear.year) : undefined,
             coursesId: selectedCourse?.id ?? undefined,
           },
           download: isSelectAllChecked ? 'ALL' : ''
