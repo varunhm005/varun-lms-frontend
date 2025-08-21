@@ -132,13 +132,6 @@ export default function Certificates() {
     });
   };
 
-  const onSearch = (value: string) => {
-    setCertificateSearch(value);
-    updateQueryParams({
-      [urlQueryKeys.query]: value,
-    });
-  };
-
   const navigate = useNavigate();
 
   // Handle course click to show years
