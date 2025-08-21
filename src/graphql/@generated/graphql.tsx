@@ -313,6 +313,8 @@ export type CertificateFilters = {
   instructorId?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['Int']['input']>;
+  year?: InputMaybe<Scalars['String']['input']>;
+  coursesId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CertificateSignature = {
@@ -3385,6 +3387,29 @@ export type GetCertificateDetailsQuery = {
       };
     } | null;
   } | null;
+};
+
+export type GetCertificateYearsByCourseQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type GetCertificateYearsByCourseQuery = {
+  __typename?: 'Query';
+  certificateYearsByCourse: Array<{
+    __typename?: 'CertificateYearByCourse';
+    courseName: string;
+    coursesId: number;
+    year: string;
+  }>;
+};
+
+export type DownloadCertificatesQueryVariables = Exact<{
+  ids: Array<Scalars['Int']['input']> | Scalars['Int']['input'];
+}>;
+
+export type DownloadCertificatesQuery = {
+  __typename?: 'Query';
+  downloadCertificates?: string | null;
 };
 
 export type UpdateCertificateMutationVariables = Exact<{
@@ -7034,6 +7059,23 @@ export const GetCertificateDetailsDocument = gql`
   }
 `;
 
+export const GetCertificateYearsByCourseDocument = gql`
+  query GetCertificateYearsByCourse($search: String) {
+    certificateYearsByCourse(search: $search) {
+      courseName
+      coursesId
+      year
+      __typename
+    }
+  }
+`;
+
+export const DownloadCertificatesDocument = gql`
+  query DownloadCertificates($ids: [Int!]!) {
+    downloadCertificates(ids: $ids)
+  }
+`;
+
 /**
  * __useGetCertificateDetailsQuery__
  *
@@ -7082,6 +7124,73 @@ export type GetCertificateDetailsQueryResult = Apollo.QueryResult<
   GetCertificateDetailsQuery,
   GetCertificateDetailsQueryVariables
 >;
+
+/**
+ * __useGetCertificateYearsByCourseQuery__
+ *
+ * To run a query within a React component, call `useGetCertificateYearsByCourseQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCertificateYearsByCourseQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCertificateYearsByCourseQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useGetCertificateYearsByCourseQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCertificateYearsByCourseQuery, GetCertificateYearsByCourseQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCertificateYearsByCourseQuery, GetCertificateYearsByCourseQueryVariables>(
+    GetCertificateYearsByCourseDocument,
+    options
+  );
+}
+export function useGetCertificateYearsByCourseLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCertificateYearsByCourseQuery, GetCertificateYearsByCourseQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCertificateYearsByCourseQuery, GetCertificateYearsByCourseQueryVariables>(
+    GetCertificateYearsByCourseDocument,
+    options
+  );
+}
+export type GetCertificateYearsByCourseQueryHookResult = ReturnType<typeof useGetCertificateYearsByCourseQuery>;
+export type GetCertificateYearsByCourseLazyQueryHookResult = ReturnType<typeof useGetCertificateYearsByCourseLazyQuery>;
+export type GetCertificateYearsByCourseQueryResult = Apollo.QueryResult<
+  GetCertificateYearsByCourseQuery,
+  GetCertificateYearsByCourseQueryVariables
+>;
+
+export function useDownloadCertificatesQuery(
+  baseOptions?: Apollo.QueryHookOptions<DownloadCertificatesQuery, DownloadCertificatesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<DownloadCertificatesQuery, DownloadCertificatesQueryVariables>(
+    DownloadCertificatesDocument,
+    options
+  );
+}
+export function useDownloadCertificatesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DownloadCertificatesQuery, DownloadCertificatesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<DownloadCertificatesQuery, DownloadCertificatesQueryVariables>(
+    DownloadCertificatesDocument,
+    options
+  );
+}
+export type DownloadCertificatesQueryHookResult = ReturnType<typeof useDownloadCertificatesQuery>;
+export type DownloadCertificatesLazyQueryHookResult = ReturnType<typeof useDownloadCertificatesLazyQuery>;
+export type DownloadCertificatesQueryResult = Apollo.QueryResult<
+  DownloadCertificatesQuery,
+  DownloadCertificatesQueryVariables
+>;
+
 export const UpdateCertificateDocument = gql`
   mutation UpdateCertificate($updateCertificateInput: UpdateCertificateInput!) {
     updateCertificate(updateCertificateInput: $updateCertificateInput) {
@@ -12661,6 +12770,8 @@ export const namedOperations = {
     GetAttendancesForSchedule: 'GetAttendancesForSchedule',
     GetCertificates: 'GetCertificates',
     GetCertificateDetails: 'GetCertificateDetails',
+    GetCertificateYearsByCourse: 'GetCertificateYearsByCourse',
+    DownloadCertificates: 'DownloadCertificates',
     GetAttendedActivityByChapterAndSchedule: 'GetAttendedActivityByChapterAndSchedule',
     GetCourseCategory: 'GetCourseCategory',
     GetChapterDetails: 'GetChapterDetails',
