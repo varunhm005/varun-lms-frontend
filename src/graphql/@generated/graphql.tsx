@@ -2698,7 +2698,7 @@ export type UpdateScheduleStudentInput = {
 };
 
 export type UpdateScheduleStudentForOfflineCourseInput = {
-  id: Scalars['ID']['input'];
+  ids: Array<Scalars['ID']['input']>;
   status: ScheduleStudentStatus;
 };
 

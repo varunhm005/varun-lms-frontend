@@ -12,7 +12,7 @@ export const useUpdateScheduleStudentForOfflineCourse = () => {
       const result = await updateScheduleStudentForOfflineCourse({
         variables: {
           updateScheduleStudentForOfflineCourseInput: {
-            id,
+            ids: [id], // Use ids array with single ID
             status: ScheduleStudentStatus.Completed,
           },
         },
@@ -24,8 +24,26 @@ export const useUpdateScheduleStudentForOfflineCourse = () => {
     }
   };
 
+  const markMultipleAsComplete = async (ids: string[]) => {
+    try {
+      const result = await updateScheduleStudentForOfflineCourse({
+        variables: {
+          updateScheduleStudentForOfflineCourseInput: {
+            ids, // Use ids array directly
+            status: ScheduleStudentStatus.Completed,
+          },
+        },
+      });
+      return result;
+    } catch (err) {
+      console.error('Error marking multiple courses as complete:', err);
+      throw err;
+    }
+  };
+
   return {
     markAsComplete,
+    markMultipleAsComplete,
     loading,
     error,
     data,

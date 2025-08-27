@@ -17,6 +17,7 @@ export default function ScheduleStudents() {
   }>();
 
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
 
   const { data, loading, refetch } = useGetScheduleStudentNameQuery({
     variables: {
@@ -34,11 +35,21 @@ export default function ScheduleStudents() {
 
   const { data: profile } = useGetUserProfileQuery();
 
-  const { markAsComplete, loading: markCompleteLoading } =
+  const { markAsComplete, markMultipleAsComplete, loading: markCompleteLoading } =
     useUpdateScheduleStudentForOfflineCourse();
 
   const profileData = profile?.getUserProfile;
   const roleName = profileData!.role!.name;
+
+  // Filter students that can be marked as complete
+  const eligibleStudents = (data?.scheduleStudents as ScheduleStudent[])?.filter(
+    (record) =>
+      (roleName === 'Admin' || roleName === 'Faculty') &&
+      record.course?.median === 'Offline' &&
+      record.completionPercentage !== 100
+  ) || [];
+
+  const canShowBulkActions = eligibleStudents.length > 0;
 
   const handleMarkAsComplete = async (record: ScheduleStudent) => {
     try {
@@ -56,6 +67,23 @@ export default function ScheduleStudents() {
     }
   };
 
+  const handleMarkMultipleAsComplete = async () => {
+    try {
+      setRefreshing(true);
+      await markMultipleAsComplete(selectedRowKeys);
+      message.success('All selected courses marked as complete successfully!');
+      
+      // Clear selections and refresh data
+      setSelectedRowKeys([]);
+      await refetch();
+    } catch (error) {
+      message.error('Failed to mark courses as complete. Please try again.');
+      console.error('Error marking courses as complete:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const showConfirmModal = (record: ScheduleStudent) => {
     Modal.confirm({
       title: 'Confirmation',
@@ -63,10 +91,30 @@ export default function ScheduleStudents() {
       okText: 'Yes, Mark as Complete',
       cancelText: 'Cancel',
       okType: 'primary',
+      okButtonProps: {
+        danger: true,
+      },
       onOk: () => handleMarkAsComplete(record),
       onCancel: () => {
         // Modal automatically closes when Cancel is clicked
         // This callback is optional - Ant Design handles the closing automatically
+      },
+    });
+  };
+
+  const showBulkConfirmModal = () => {
+    Modal.confirm({
+      title: 'Confirmation',
+      content: 'Do you want to mark all as completed?',
+      okText: 'Yes',
+      cancelText: 'Cancel',
+      okType: 'primary',
+      okButtonProps: {
+        danger: true,
+      },
+      onOk: () => handleMarkMultipleAsComplete(),
+      onCancel: () => {
+        // Modal automatically closes when Cancel is clicked
       },
     });
   };
@@ -79,7 +127,48 @@ export default function ScheduleStudents() {
     <main className="p-6 text-left">
       <h1 className="mb-6 text-3xl font-bold">Schedule Students</h1>
 
-      <Table size="small" pagination={false} dataSource={(data?.scheduleStudents as any) || []}>
+      {/* Bulk Actions Section */}
+      {canShowBulkActions && (
+        <div className="mb-4 flex items-center justify-end bg-gray-50 p-4 rounded-lg">
+          <div className="flex items-center gap-4">
+            {/* <span className="text-sm text-gray-600">
+              {selectedRowKeys.length} of {eligibleStudents.length} eligible students selected
+            </span> */}
+            <Button
+              type="primary"
+              disabled={selectedRowKeys.length === 0 || markCompleteLoading || refreshing}
+              onClick={showBulkConfirmModal}
+              loading={markCompleteLoading || refreshing}
+            >
+              Mark as Complete ({selectedRowKeys.length})
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <Table 
+        size="small" 
+        pagination={false} 
+        dataSource={(data?.scheduleStudents as any) || []}
+        rowSelection={
+          canShowBulkActions
+            ? {
+                selectedRowKeys,
+                onChange: (selectedKeys) => {
+                  setSelectedRowKeys(selectedKeys as string[]);
+                },
+                getCheckboxProps: (record: ScheduleStudent) => ({
+                  disabled: !(
+                    (roleName === 'Admin' || roleName === 'Faculty') &&
+                    record.course?.median === 'Offline' &&
+                    record.completionPercentage !== 100
+                  ),
+                }),
+              }
+            : undefined
+        }
+        rowKey="id"
+      >
         <Table.Column
           title="Sl No."
           render={(_, __, index) => {

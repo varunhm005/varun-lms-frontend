@@ -185,3 +185,15 @@ query GetCourseScheduleOnly(
     }
   }
 }
+
+mutation UpdateScheduleStudentForOfflineCourse($updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput!) {
+  updateScheduleStudentOfflineCourse(
+    updateScheduleStudentForOfflineCourseInput: $updateScheduleStudentForOfflineCourseInput
+  ) {
+    id
+    name
+    slug
+    courseScheduleId
+    __typename
+  }
+}
