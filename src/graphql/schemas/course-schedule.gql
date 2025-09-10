@@ -90,6 +90,7 @@ query GetMyStudentSchedules($input: GetMyStudentSchedulesInput) {
       course {
         name
         id
+        examRequired
       }
       courseLevel {
         id

@@ -4128,7 +4128,7 @@ export type GetMyStudentSchedulesQuery = {
       startTime?: any | null;
       courseLevelId?: string | null;
       coursesId?: string | null;
-      course?: { __typename?: 'Course'; name: string; id: string } | null;
+      course?: { __typename?: 'Course'; name: string; id: string; examRequired: boolean } | null;
       courseLevel?: { __typename?: 'CourseLevel'; id: string; title: string } | null;
     };
     exams?: Array<{
@@ -4159,7 +4159,7 @@ export type CourseSchedulesQuery = {
       slug: string;
       startDate?: any | null;
       startTime?: any | null;
-      course?: { __typename?: 'Course'; id: string; name: string } | null;
+      course?: { __typename?: 'Course'; id: string; name: string; examRequired: boolean } | null;
       courseLevel?: { __typename?: 'CourseLevel'; id: string; level: number; title: string } | null;
     } | null>;
     paging: {
@@ -9041,6 +9041,7 @@ export const GetMyStudentSchedulesDocument = gql`
         course {
           name
           id
+          examRequired
         }
         courseLevel {
           id
