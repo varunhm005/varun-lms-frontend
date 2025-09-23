@@ -295,7 +295,8 @@ function StudentCourseDDetails() {
                     }}
                     className=" text-base font-black text-black"
                   >
-                    {lastExam ? formatDate(lastExam.createdAt) : 'Not Attended'}
+                    {lastExam ? formatDate(lastExam.createdAt) : 
+                    !data?.scheduleStudent?.courseSchedule?.course?.examRequired ? 'Not Required' : 'Not Attended'}
                   </h6>
                 </div>
               </div>

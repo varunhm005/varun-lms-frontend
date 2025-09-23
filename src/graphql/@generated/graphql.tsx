@@ -313,6 +313,8 @@ export type CertificateFilters = {
   instructorId?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['Int']['input']>;
+  year?: InputMaybe<Scalars['Int']['input']>;
+  coursesId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CertificateSignature = {
@@ -768,6 +770,7 @@ export type CreateCourseScheduleInput = {
   startDate?: InputMaybe<Scalars['Date']['input']>;
   startTime?: InputMaybe<Scalars['Date']['input']>;
   students: Array<Scalars['ID']['input']>;
+  designationIds?: Array<Scalars['Int']['input']>;
 };
 
 export type CreateDepartmentInput = {
@@ -1086,6 +1089,7 @@ export type GetScheduleStudentInput = {
   startDate?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<ScheduleStudentStatus>;
   userId?: InputMaybe<Scalars['Int']['input']>;
+  course?: Maybe<Course>;
 };
 
 export enum Language {
@@ -1641,6 +1645,10 @@ export type MutationUpdateScheduleProgressArgs = {
 
 export type MutationUpdateScheduleStudentArgs = {
   updateScheduleStudentInput: UpdateScheduleStudentInput;
+};
+
+export type MutationUpdateScheduleStudentForOfflineCourseArgs = {
+  updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput;
 };
 
 export type MutationUpdateUserArgs = {
@@ -2365,6 +2373,7 @@ export type ScheduleStudent = {
   updatedAt: Scalars['String']['output'];
   user: User;
   userId: Scalars['Int']['output'];
+  course?: Maybe<Course>;
 };
 
 export enum ScheduleStudentStatus {
@@ -2593,6 +2602,7 @@ export type UpdateCourseScheduleInput = {
   startDate?: InputMaybe<Scalars['Date']['input']>;
   startTime?: InputMaybe<Scalars['Date']['input']>;
   students?: InputMaybe<Array<Scalars['ID']['input']>>;
+  designationIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 export type UpdateDepartmentInput = {
@@ -2685,6 +2695,11 @@ export type UpdateScheduleProgressInput = {
 export type UpdateScheduleStudentInput = {
   id: Scalars['ID']['input'];
   status?: InputMaybe<ScheduleStudentStatus>;
+};
+
+export type UpdateScheduleStudentForOfflineCourseInput = {
+  ids: Array<Scalars['ID']['input']>;
+  status: ScheduleStudentStatus;
 };
 
 export type UpdateUserInput = {
@@ -3374,6 +3389,31 @@ export type GetCertificateDetailsQuery = {
   } | null;
 };
 
+export type GetCertificateYearsByCourseQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type GetCertificateYearsByCourseQuery = {
+  __typename?: 'Query';
+  certificateYearsByCourse: Array<{
+    __typename?: 'CertificateCourseYearGroup';
+    courseName: string;
+    coursesId: number;
+    year: Array<number>;
+  }>;
+};
+
+export type DownloadCertificatesQueryVariables = Exact<{
+  ids?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+  certificateFilter?: InputMaybe<CertificateFilters>;
+  download: Scalars['String']['input'];
+}>;
+
+export type DownloadCertificatesQuery = {
+  __typename?: 'Query';
+  downloadCertificates?: string | null;
+};
+
 export type UpdateCertificateMutationVariables = Exact<{
   updateCertificateInput: UpdateCertificateInput;
 }>;
@@ -3876,6 +3916,7 @@ export type GetCourseDetailsWithLevelIdQuery = {
 
 export type GetCourseLevelNotAttendedUserQueryVariables = Exact<{
   courseLevelId: Scalars['Int']['input'];
+  designationIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 }>;
 
 export type GetCourseLevelNotAttendedUserQuery = {
@@ -3890,6 +3931,7 @@ export type GetCourseLevelNotAttendedUserQuery = {
 
 export type GetStudentsExpiredInCourseQueryVariables = Exact<{
   courseLevelId: Scalars['Int']['input'];
+  designationIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 }>;
 
 export type GetStudentsExpiredInCourseQuery = {
@@ -3977,6 +4019,7 @@ export type CreateCourseScheduleMutation = {
     startTime?: any | null;
     updatedAt: any;
     isLocked?: boolean | null;
+    designationIds?: Array<number> | null;
   };
 };
 
@@ -3993,6 +4036,7 @@ export type UpdateCourseScheduleMutation = {
     coursesId?: string | null;
     courseLevelId?: string | null;
     isLocked?: boolean | null;
+    designationIds?: Array<number> | null;
   };
 };
 
@@ -4003,6 +4047,7 @@ export type GetCourseScheduleDetailsQueryVariables = Exact<{
 export type GetCourseScheduleDetailsQuery = {
   __typename?: 'Query';
   courseSchedule?: {
+    designationIds(designationIds: any): unknown;
     __typename?: 'CourseSchedule';
     id: string;
     name: string;
@@ -4031,6 +4076,7 @@ export type GetCourseScheduleDetailsQuery = {
       maxStudentsAllowed?: number | null;
     } | null;
   } | null;
+  designationIds?: Array<number> | null;
 };
 
 export type GetCourseScheduleQueryVariables = Exact<{
@@ -4053,6 +4099,7 @@ export type GetCourseScheduleQuery = {
     courseLevelId?: string | null;
     examId?: number | null;
     isLocked?: boolean | null;
+    designationIds?: Array<number> | null;
   } | null;
 };
 
@@ -4081,7 +4128,7 @@ export type GetMyStudentSchedulesQuery = {
       startTime?: any | null;
       courseLevelId?: string | null;
       coursesId?: string | null;
-      course?: { __typename?: 'Course'; name: string; id: string } | null;
+      course?: { __typename?: 'Course'; name: string; id: string; examRequired: boolean } | null;
       courseLevel?: { __typename?: 'CourseLevel'; id: string; title: string } | null;
     };
     exams?: Array<{
@@ -4112,7 +4159,7 @@ export type CourseSchedulesQuery = {
       slug: string;
       startDate?: any | null;
       startTime?: any | null;
-      course?: { __typename?: 'Course'; id: string; name: string } | null;
+      course?: { __typename?: 'Course'; id: string; name: string; examRequired: boolean } | null;
       courseLevel?: { __typename?: 'CourseLevel'; id: string; level: number; title: string } | null;
     } | null>;
     paging: {
@@ -5128,6 +5175,21 @@ export type UpdateScheduleStudentMutation = {
   };
 };
 
+export type UpdateScheduleStudentForOfflineCourseMutationVariables = Exact<{
+  updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput;
+}>;
+
+export type UpdateScheduleStudentForOfflineCourseMutation = {
+  __typename?: 'Mutation';
+  updateScheduleStudentOfflineCourse: {
+    __typename?: 'ScheduleStudent';
+    id: string;
+    name: string;
+    slug: string;
+    courseScheduleId: number;
+  };
+};
+
 export type GetScheduleStudentDetailsQueryVariables = Exact<{
   slug: Scalars['ID']['input'];
 }>;
@@ -5234,6 +5296,7 @@ export type GetScheduleStudentNameQuery = {
     slug: string;
     startedOn?: string | null;
     courseScheduleId: number;
+    course?: Maybe<Course>;
     user: { __typename?: 'User'; id: number; name: string; idNumber: string };
   } | null>;
 };
@@ -6998,6 +7061,23 @@ export const GetCertificateDetailsDocument = gql`
   }
 `;
 
+export const GetCertificateYearsByCourseDocument = gql`
+  query GetCertificateYearsByCourse($search: String) {
+    certificateYearsByCourse(search: $search) {
+      courseName
+      coursesId
+      year
+      __typename
+    }
+  }
+`;
+
+export const DownloadCertificatesDocument = gql`
+  query DownloadCertificates($ids: [Int!], $certificateFilter: CertificateFilters, $download: String!) {
+    downloadCertificates(ids: $ids, certificateFilter: $certificateFilter, download: $download)
+  }
+`;
+
 /**
  * __useGetCertificateDetailsQuery__
  *
@@ -7046,6 +7126,73 @@ export type GetCertificateDetailsQueryResult = Apollo.QueryResult<
   GetCertificateDetailsQuery,
   GetCertificateDetailsQueryVariables
 >;
+
+/**
+ * __useGetCertificateYearsByCourseQuery__
+ *
+ * To run a query within a React component, call `useGetCertificateYearsByCourseQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCertificateYearsByCourseQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCertificateYearsByCourseQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useGetCertificateYearsByCourseQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCertificateYearsByCourseQuery, GetCertificateYearsByCourseQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCertificateYearsByCourseQuery, GetCertificateYearsByCourseQueryVariables>(
+    GetCertificateYearsByCourseDocument,
+    options
+  );
+}
+export function useGetCertificateYearsByCourseLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCertificateYearsByCourseQuery, GetCertificateYearsByCourseQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCertificateYearsByCourseQuery, GetCertificateYearsByCourseQueryVariables>(
+    GetCertificateYearsByCourseDocument,
+    options
+  );
+}
+export type GetCertificateYearsByCourseQueryHookResult = ReturnType<typeof useGetCertificateYearsByCourseQuery>;
+export type GetCertificateYearsByCourseLazyQueryHookResult = ReturnType<typeof useGetCertificateYearsByCourseLazyQuery>;
+export type GetCertificateYearsByCourseQueryResult = Apollo.QueryResult<
+  GetCertificateYearsByCourseQuery,
+  GetCertificateYearsByCourseQueryVariables
+>;
+
+export function useDownloadCertificatesQuery(
+  baseOptions?: Apollo.QueryHookOptions<DownloadCertificatesQuery, DownloadCertificatesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<DownloadCertificatesQuery, DownloadCertificatesQueryVariables>(
+    DownloadCertificatesDocument,
+    options
+  );
+}
+export function useDownloadCertificatesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DownloadCertificatesQuery, DownloadCertificatesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<DownloadCertificatesQuery, DownloadCertificatesQueryVariables>(
+    DownloadCertificatesDocument,
+    options
+  );
+}
+export type DownloadCertificatesQueryHookResult = ReturnType<typeof useDownloadCertificatesQuery>;
+export type DownloadCertificatesLazyQueryHookResult = ReturnType<typeof useDownloadCertificatesLazyQuery>;
+export type DownloadCertificatesQueryResult = Apollo.QueryResult<
+  DownloadCertificatesQuery,
+  DownloadCertificatesQueryVariables
+>;
+
 export const UpdateCertificateDocument = gql`
   mutation UpdateCertificate($updateCertificateInput: UpdateCertificateInput!) {
     updateCertificate(updateCertificateInput: $updateCertificateInput) {
@@ -8324,8 +8471,8 @@ export type GetCourseDetailsWithLevelIdQueryResult = Apollo.QueryResult<
   GetCourseDetailsWithLevelIdQueryVariables
 >;
 export const GetCourseLevelNotAttendedUserDocument = gql`
-  query GetCourseLevelNotAttendedUser($courseLevelId: Int!) {
-    courseLevelNotAttendedUser(courseLevelId: $courseLevelId) {
+  query GetCourseLevelNotAttendedUser($courseLevelId: Int!, $designationIds: [Int!]) {
+    courseLevelNotAttendedUser(courseLevelId: $courseLevelId, designationIds: $designationIds) {
       id
       name
       slug
@@ -8384,8 +8531,8 @@ export type GetCourseLevelNotAttendedUserQueryResult = Apollo.QueryResult<
   GetCourseLevelNotAttendedUserQueryVariables
 >;
 export const GetStudentsExpiredInCourseDocument = gql`
-  query GetStudentsExpiredInCourse($courseLevelId: Int!) {
-    getStudentsExpiredInCourse(courseLevelId: $courseLevelId) {
+  query GetStudentsExpiredInCourse($courseLevelId: Int!, $designationIds: [Int!]) {
+    getStudentsExpiredInCourse(courseLevelId: $courseLevelId, designationIds: $designationIds) {
       id
       name
       slug
@@ -8755,6 +8902,7 @@ export const GetCourseScheduleDetailsDocument = gql`
       attendanceProof
       attendanceProofCreatedOn
       examId
+      designationIds
       course {
         median
         maxStudentsAllowed
@@ -8893,6 +9041,7 @@ export const GetMyStudentSchedulesDocument = gql`
         course {
           name
           id
+          examRequired
         }
         courseLevel {
           id
@@ -11621,6 +11770,66 @@ export type UpdateScheduleStudentMutationOptions = Apollo.BaseMutationOptions<
   UpdateScheduleStudentMutation,
   UpdateScheduleStudentMutationVariables
 >;
+
+export const UpdateScheduleStudentForOfflineCourseDocument = gql`
+  mutation UpdateScheduleStudentForOfflineCourse($updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput!) {
+    updateScheduleStudentOfflineCourse(
+      updateScheduleStudentForOfflineCourseInput: $updateScheduleStudentForOfflineCourseInput
+    ) {
+      id
+      name
+      slug
+      courseScheduleId
+      __typename
+    }
+  }
+`;
+
+export type UpdateScheduleStudentForOfflineCourseMutationFn = Apollo.MutationFunction<
+  UpdateScheduleStudentForOfflineCourseMutation,
+  UpdateScheduleStudentForOfflineCourseMutationVariables
+>;
+
+/**
+ * __useUpdateScheduleStudentForOfflineCourseMutation__
+ *
+ * To run a mutation, you first call `useUpdateScheduleStudentForOfflineCourseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateScheduleStudentForOfflineCourseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateScheduleStudentForOfflineCourseMutation, { data, loading, error }] = useUpdateScheduleStudentForOfflineCourseMutation({
+ *   variables: {
+ *      updateScheduleStudentForOfflineCourseInput: // value for 'updateScheduleStudentForOfflineCourseInput'
+ *   },
+ * });
+ */
+export function useUpdateScheduleStudentForOfflineCourseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateScheduleStudentForOfflineCourseMutation,
+    UpdateScheduleStudentForOfflineCourseMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateScheduleStudentForOfflineCourseMutation, UpdateScheduleStudentForOfflineCourseMutationVariables>(
+    UpdateScheduleStudentForOfflineCourseDocument,
+    options
+  );
+}
+
+export type UpdateScheduleStudentForOfflineCourseMutationHookResult = ReturnType<
+  typeof useUpdateScheduleStudentForOfflineCourseMutation
+>;
+export type UpdateScheduleStudentForOfflineCourseMutationResult =
+  Apollo.MutationResult<UpdateScheduleStudentForOfflineCourseMutation>;
+export type UpdateScheduleStudentForOfflineCourseMutationOptions = Apollo.BaseMutationOptions<
+  UpdateScheduleStudentForOfflineCourseMutation,
+  UpdateScheduleStudentForOfflineCourseMutationVariables
+>;
+
 export const GetScheduleStudentDetailsDocument = gql`
   query GetScheduleStudentDetails($slug: ID!) {
     scheduleStudent(slug: $slug) {
@@ -11773,6 +11982,11 @@ export const GetScheduleStudentNameDocument = gql`
       slug
       startedOn
       courseScheduleId
+      course {
+        id
+        name
+        median
+      }
     }
   }
 `;
@@ -12559,6 +12773,8 @@ export const namedOperations = {
     GetAttendancesForSchedule: 'GetAttendancesForSchedule',
     GetCertificates: 'GetCertificates',
     GetCertificateDetails: 'GetCertificateDetails',
+    GetCertificateYearsByCourse: 'GetCertificateYearsByCourse',
+    DownloadCertificates: 'DownloadCertificates',
     GetAttendedActivityByChapterAndSchedule: 'GetAttendedActivityByChapterAndSchedule',
     GetCourseCategory: 'GetCourseCategory',
     GetChapterDetails: 'GetChapterDetails',
@@ -12661,5 +12877,6 @@ export const namedOperations = {
     updateUserProfile: 'updateUserProfile',
     UpdatePassword: 'UpdatePassword',
     BulkInsertUser: 'BulkInsertUser',
+    UpdateScheduleStudentForOfflineCourse: 'UpdateScheduleStudentForOfflineCourse',
   },
 };

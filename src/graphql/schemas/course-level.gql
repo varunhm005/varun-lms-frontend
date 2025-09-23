@@ -129,16 +129,16 @@ query GetCourseDetailsWithLevelId($courseLevelId: Int!) {
   }
 }
 
-query GetCourseLevelNotAttendedUser($courseLevelId: Int!) {
-  courseLevelNotAttendedUser(courseLevelId: $courseLevelId) {
+query GetCourseLevelNotAttendedUser($courseLevelId: Int!, $designationIds: [Int!]) {
+  courseLevelNotAttendedUser(courseLevelId: $courseLevelId designationIds: $designationIds) {
     id
     name
     slug
   }
 }
 
-query GetStudentsExpiredInCourse($courseLevelId: Int!) {
-  getStudentsExpiredInCourse(courseLevelId: $courseLevelId) {
+query GetStudentsExpiredInCourse($courseLevelId: Int!, $designationIds: [Int!]) {
+  getStudentsExpiredInCourse(courseLevelId: $courseLevelId, designationIds: $designationIds) {
     id
     name
     slug

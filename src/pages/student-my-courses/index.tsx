@@ -61,7 +61,7 @@ function MyStudentCourses() {
                             : formatEnums(course?.exams[course.exams.length - 1]?.status ?? '')}
                         </span>
                       ) : (
-                        'Not attended'
+                        !course?.courseSchedule?.course?.examRequired ? 'Not Required' : 'Not Attended'
                       )}
                     </span>
                   </p>

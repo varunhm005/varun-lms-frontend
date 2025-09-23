@@ -14,5 +14,6 @@ export default defineConfig({
 
   build: {
     sourcemap: true,
+    chunkSizeWarningLimit: 1000, // Increase warning limit to 1MB
   },
 });

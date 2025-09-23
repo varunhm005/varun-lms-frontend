@@ -116,3 +116,16 @@ mutation RequestCertificate($examId: Int!) {
     message
   }
 }
+
+query GetCertificateYearsByCourse($search: String) {
+  certificateYearsByCourse(search: $search) {
+    courseName
+    coursesId
+    year
+    __typename
+  }
+}
+
+query DownloadCertificates($ids: [Int!], $certificateFilter: CertificateFilters, $download: String!) {
+  downloadCertificates(ids: $ids, certificateFilter: $certificateFilter, download: $download)
+}

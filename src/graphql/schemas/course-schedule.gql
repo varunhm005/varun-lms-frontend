@@ -90,6 +90,7 @@ query GetMyStudentSchedules($input: GetMyStudentSchedulesInput) {
       course {
         name
         id
+        examRequired
       }
       courseLevel {
         id
@@ -183,5 +184,17 @@ query GetCourseScheduleOnly(
       hasNextPage
       currentPage
     }
+  }
+}
+
+mutation UpdateScheduleStudentForOfflineCourse($updateScheduleStudentForOfflineCourseInput: UpdateScheduleStudentForOfflineCourseInput!) {
+  updateScheduleStudentOfflineCourse(
+    updateScheduleStudentForOfflineCourseInput: $updateScheduleStudentForOfflineCourseInput
+  ) {
+    id
+    name
+    slug
+    courseScheduleId
+    __typename
   }
 }
