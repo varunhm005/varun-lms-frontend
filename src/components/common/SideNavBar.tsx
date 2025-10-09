@@ -52,7 +52,7 @@ const headerStyle: React.CSSProperties = {
 const logoStyle: React.CSSProperties = {
   height: '50px',
   transition: 'all 0.2s',
-  width: '150px'
+  width: '150px',
 };
 
 const menuStyle: React.CSSProperties = {
