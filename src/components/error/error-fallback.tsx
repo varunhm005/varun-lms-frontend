@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import { FallbackProps } from 'react-error-boundary';
-import Logo from '../../assets/images/logo.png';
+import Logo from '../../assets/images/newLogo.jpg';
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
