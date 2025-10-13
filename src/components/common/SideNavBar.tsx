@@ -20,7 +20,7 @@ import {
 import { Button, Layout, Menu } from 'antd';
 import React, { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '../../assets/images/newLogo.jpg';
+import Logo from '../../assets/images/newLogo.png';
 import {
   ADMIN_PERMISSIONS,
   FACULTY_PERMISSIONS,
