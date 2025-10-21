@@ -20,7 +20,7 @@ import {
 import { Button, Layout, Menu } from 'antd';
 import React, { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '../../assets/images/logo.png';
+import Logo from '../../assets/images/newLogo.png';
 import {
   ADMIN_PERMISSIONS,
   FACULTY_PERMISSIONS,
@@ -50,8 +50,9 @@ const headerStyle: React.CSSProperties = {
 };
 
 const logoStyle: React.CSSProperties = {
-  height: '32px',
+  height: '50px',
   transition: 'all 0.2s',
+  width: '150px',
 };
 
 const menuStyle: React.CSSProperties = {
@@ -298,7 +299,7 @@ export default function SideNavBar() {
             className="logo"
             src={Logo}
             alt=""
-            style={{ ...logoStyle, maxWidth: collapsed ? '32px' : '150px' }}
+            style={{ ...logoStyle, maxWidth: collapsed ? '50px' : '150px' }}
           />
         </Link>
       </div>

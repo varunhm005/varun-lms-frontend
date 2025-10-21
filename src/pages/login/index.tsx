@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RightImg from '../../assets/images/login-three.png';
-import Logo from '../../assets/images/logo.png';
+import Logo from '../../assets/images/newLogo.png';
 import LoginForm from '../../components/auth/login-form';
 import ResetPassword from '../../components/auth/reset-password';
 import { auth } from '../../configs/firebase';
